@@ -10,85 +10,42 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     class DialogueAsset : Asset
     {
-        public struct Dialogue
-        {
-            public String id;
-            public String actor;
-            public String text;
-            public Int32 next;
-            public List<Int32> responses;
+        #region Fields
 
-            public Boolean isResponse
-            {
-                get
-                {
-                    Int32 tmp;
-                    return Int32.TryParse(id, out tmp);
-                }
-            }
-        }
-
-        public struct State
-        {
-            public String actor;
-            public String player;
-            public Int32 state;
-        }
-
-        //! TODO Implement the banana code.
-        //
-
-
+        /// <summary>
+        /// The dialogues.
+        /// </summary>
         List<Dialogue> Dialogues = new List<Dialogue>();
+
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private Logger logger;
+
+        /// <summary>
+        /// The states.
+        /// </summary>
         List<State> States = new List<State>();
 
-        private Int32 FindStateIndex(String actor, String player)
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.Logger class.
+        /// </summary>
+        public DialogueAsset()
+            : base()
         {
-            Int32 index = States.FindIndex(p => p.actor.Equals(actor) && p.player.Equals(player));
-
-            if (index == -1)
-            {
-                States.Add(new State()
-                {
-                    actor = actor,
-                    player = player,
-                    state = 0
-                });
-            }
-
-            return (index != -1) ? States[index].state : 0;
+            logger = AssetManager.Instance.findAssetByClass("Logger") as Logger;
         }
 
-        private void UpdateState(String actor, String player, Int32 state)
-        {
-            Int32 index = States.FindIndex(p => p.actor.Equals(actor) && p.player.Equals(player));
+        #endregion Constructors
 
-            if (index == -1)
-            {
-                // New State
-                States.Add(new State()
-                {
-                    actor = actor,
-                    player = player,
-                    state = state
-                });
-            }
-            else
-            {
-                // Update State
-                States[index] = new State()
-                {
-                    actor = actor,
-                    player = player,
-                    state = state
-                };
-            }
-        }
+        #region Methods
 
         public Dialogue interact(String actor, String player, Int32 response)
         {
@@ -122,12 +79,12 @@ namespace asset_proof_of_concept_demo_CSharp
 
                 if (numeric)
                 {
-                    // If its an integer response, move the dialogue state as this is a 
-                    // response choice 
-                    // 
+                    // If its an integer response, move the dialogue state as this is a
+                    // response choice
+                    //
                     if (response_dialogue.isResponse)
                     {
-                        Console.WriteLine("  << {0}.", response_dialogue.id);
+                        DoLog("  << {0} was chosen.", response_dialogue.id);
                         state = response_dialogue.next;
                         UpdateState(actor, player, state);
                     }
@@ -136,10 +93,12 @@ namespace asset_proof_of_concept_demo_CSharp
                 }
                 else
                 {
-                    // 
-                    // ... otherwise this was a "what about the [item]" type of choice 
-                    // so we return the dialogue but don't modify the state 
-                    // 
+                    DoLog("{0} ask {1} about {2}", actor, player, response);
+
+                    //
+                    // ... otherwise this was a "what about the [item]" type of choice
+                    // so we return the dialogue but don't modify the state
+                    //
                     dialogue = response_dialogue;
                 }
             }
@@ -148,27 +107,27 @@ namespace asset_proof_of_concept_demo_CSharp
                 dialogue = Dialogues.First(p => p.actor.Equals(actor) && p.id.Equals(state.ToString()));
             }
 
-            //126     // Process responses 
-            //127     // 
-            //128     var responses = new Array(); 
-            //129     if (dialogue.responses) { 
-            //130         for (r in dialogue.responses) { 
-            //131             var response = Dialogue.__getDialogue(actor, dialogue.responses[r]); 
-            //132             responses.push({ id: response.id, text: response.text }); 
-            //133         } 
-            //134     } 
-            //135 
+            //126     // Process responses
+            //127     //
+            //128     var responses = new Array();
+            //129     if (dialogue.responses) {
+            //130         for (r in dialogue.responses) {
+            //131             var response = Dialogue.__getDialogue(actor, dialogue.responses[r]);
+            //132             responses.push({ id: response.id, text: response.text });
+            //133         }
+            //134     }
+            //135
 
-            //136     var dialogue_processed = {}; 
-            //137     dialogue_processed.text = dialogue.text; 
-            //138     dialogue_processed.responses = responses; 
-            //139 
+            //136     var dialogue_processed = {};
+            //137     dialogue_processed.text = dialogue.text;
+            //138     dialogue_processed.responses = responses;
+            //139
 
-            //140     // 
-            //141     // Move the conversation on 
-            //142     // 
+            //140     //
+            //141     // Move the conversation on
+            //142     //
 
-            Console.WriteLine("{0}. {1}", dialogue.id, dialogue.text);
+            DoLog("{0}. {1}", dialogue.id, dialogue.text);
 
             if (dialogue.responses != null)
             {
@@ -176,7 +135,7 @@ namespace asset_proof_of_concept_demo_CSharp
                 {
                     Dialogue answer = Dialogues.Find(p => p.id.Equals(rId.ToString()));
 
-                    Console.WriteLine("  >> {0}. {1}", answer.id, answer.text);
+                    DoLog("  >> {0}. {1}", answer.id, answer.text);
                 }
             }
 
@@ -184,11 +143,17 @@ namespace asset_proof_of_concept_demo_CSharp
             {
                 UpdateState(actor, player, dialogue.next);
             }
-            //146 
+            //146
 
             return dialogue;
         }
 
+        /// <summary>
+        /// Loads a script.
+        /// </summary>
+        ///
+        /// <param name="actor"> The actor. </param>
+        /// <param name="url">   URL of the document. </param>
         public void LoadScript(String actor, String url)
         {
             String[] lines = File.ReadAllLines(url);
@@ -202,7 +167,7 @@ namespace asset_proof_of_concept_demo_CSharp
                 dialogue.actor = actor;
                 dialogue.next = -1;
 
-                if (!"1234567890".Contains(line.First()))
+                if (!Char.IsNumber(line.First()))
                 {
                     dialogue.id = line.Substring(0, line.IndexOf(':'));
                     dialogue.text = line.Substring(line.IndexOf(':') + 1).Trim();
@@ -236,5 +201,179 @@ namespace asset_proof_of_concept_demo_CSharp
                 Dialogues.Add(dialogue);
             }
         }
+
+        /// <summary>
+        /// Executes the log operation.
+        /// </summary>
+        ///
+        /// <param name="msg"> The message. </param>
+        private void DoLog(String msg)
+        {
+            if (logger != null)
+            {
+                logger.log(msg);
+            }
+            else
+            {
+                Console.WriteLine(msg);
+            }
+        }
+
+        /// <summary>
+        /// Executes the log operation.
+        /// </summary>
+        ///
+        /// <param name="msg">  The message. </param>
+        /// <param name="args"> A variable-length parameters list containing arguments. </param>
+        private void DoLog(String msg, params Object[] args)
+        {
+            DoLog(String.Format(msg, args));
+        }
+
+        /// <summary>
+        /// Searches for the first state index.
+        /// </summary>
+        ///
+        /// <param name="actor">  The actor. </param>
+        /// <param name="player"> The player. </param>
+        ///
+        /// <returns>
+        /// The found state index.
+        /// </returns>
+        private Int32 FindStateIndex(String actor, String player)
+        {
+            Int32 index = States.FindIndex(p => p.actor.Equals(actor) && p.player.Equals(player));
+
+            if (index == -1)
+            {
+                States.Add(new State()
+                {
+                    actor = actor,
+                    player = player,
+                    state = 0
+                });
+            }
+
+            return (index != -1) ? States[index].state : 0;
+        }
+
+        /// <summary>
+        /// Updates the state.
+        /// </summary>
+        ///
+        /// <param name="actor">  The actor. </param>
+        /// <param name="player"> The player. </param>
+        /// <param name="state">  The state. </param>
+        private void UpdateState(String actor, String player, Int32 state)
+        {
+            Int32 index = States.FindIndex(p => p.actor.Equals(actor) && p.player.Equals(player));
+
+            if (index == -1)
+            {
+                // New State
+                States.Add(new State()
+                {
+                    actor = actor,
+                    player = player,
+                    state = state
+                });
+            }
+            else
+            {
+                // Update State
+                States[index] = new State()
+                {
+                    actor = actor,
+                    player = player,
+                    state = state
+                };
+            }
+        }
+
+        #endregion Methods
+
+        #region Nested Types
+
+        /// <summary>
+        /// A dialogue.
+        /// </summary>
+        public struct Dialogue
+        {
+            #region Fields
+
+            /// <summary>
+            /// The actor.
+            /// </summary>
+            public String actor;
+
+            /// <summary>
+            /// The identifier.
+            /// </summary>
+            public String id;
+
+            /// <summary>
+            /// The next.
+            /// </summary>
+            public Int32 next;
+
+            /// <summary>
+            /// The responses.
+            /// </summary>
+            public List<Int32> responses;
+
+            /// <summary>
+            /// The text.
+            /// </summary>
+            public String text;
+
+            #endregion Fields
+
+            #region Properties
+
+            /// <summary>
+            /// Gets a value indicating whether this object is response.
+            /// </summary>
+            ///
+            /// <value>
+            /// true if this object is response, false if not.
+            /// </value>
+            public Boolean isResponse
+            {
+                get
+                {
+                    Int32 tmp;
+                    return Int32.TryParse(id, out tmp);
+                }
+            }
+
+            #endregion Properties
+        }
+
+        /// <summary>
+        /// A state.
+        /// </summary>
+        public struct State
+        {
+            #region Fields
+
+            /// <summary>
+            /// The actor.
+            /// </summary>
+            public String actor;
+
+            /// <summary>
+            /// The player.
+            /// </summary>
+            public String player;
+
+            /// <summary>
+            /// The state.
+            /// </summary>
+            public Int32 state;
+
+            #endregion Fields
+        }
+
+        #endregion Nested Types
     }
 }

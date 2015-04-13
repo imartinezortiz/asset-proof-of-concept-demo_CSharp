@@ -32,6 +32,11 @@ namespace asset_proof_of_concept_demo_CSharp
             Console.WriteLine("[demo.html].{0}: [{1}]", topic, ArgsToString(args));
         }
 
+        public static void myLogger(String msg)
+        {
+            Console.WriteLine("Custom Logging: {0}", msg);
+        }
+
         /// <summary>
         /// Arguments to String.
         /// </summary>
@@ -85,9 +90,7 @@ namespace asset_proof_of_concept_demo_CSharp
             //! TODO Implement replacing method behavior.
             //
             // Replace the 2nd Logger's log method by a native version supplied by the Game Engine. 
-            /* 
-            asset4.log = myLogger; //or cc.log in Cocos2D-html5; 
-            */
+            asset4.OnLog += myLogger; //or cc.log in Cocos2D-html5; 
 
             // Check the results for both Loggers differ (one message goes to the console, the other shows as an alert). 
             // 

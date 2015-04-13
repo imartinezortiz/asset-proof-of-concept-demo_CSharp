@@ -12,53 +12,22 @@ namespace asset_proof_of_concept_demo_CSharp
     /// <summary>
     /// An asset.
     /// </summary>
-    public class Asset : IAsset
+    public class Asset : BaseAsset
     {
-        /// <summary>
-        /// Gets the class.
-        /// </summary>
-        ///
-        /// <value>
-        /// The class.
-        /// </value>
-        public String Class
-        {
-            get
-            {
-                return this.GetType().Name;
-            }
-        }
-
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        ///
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public String Id
-        {
-            get;
-            private set;
-        }
-
-        private String testSubscription;
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.Asset class.
         /// </summary>
         public Asset()
+            : base()
         {
-            this.Id = AssetManager.Instance.registerAssetInstance(this, this.Class);
-
-            //! NOTE Unlike the JavaScript and Typescript versions (using a setTimeout) registration will not get triggered during publish in the AssetManager constructor.
-            // 
-            testSubscription = pubsubz.subscribe("EventSystem.Init", (topics, data) =>
-            {
-                //This code fails in TypeScript (coded there as 'this.Id') as this points to the method and not the Asset. 
-                Console.WriteLine("[{0}].{1}: {2}", this.Id, topics, data);
-            });
+            // Nothing yet
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
         /// Test if asset1 can find the Logger (asset3) thru the AssetManager.
@@ -72,7 +41,7 @@ namespace asset_proof_of_concept_demo_CSharp
         public void publicMethod(String msg)
         {
             //! TODO Nicer would be to return the correct type of Asset.
-            // 
+            //
             List<IAsset> loggers = AssetManager.Instance.findAssetsByClass("Logger");
 
             if (loggers.Count > 0)
@@ -82,7 +51,8 @@ namespace asset_proof_of_concept_demo_CSharp
                     (l as Logger).log(l.Id + " - " + msg);
                 }
             }
-
         }
+
+        #endregion Methods
     }
 }

@@ -14,10 +14,26 @@ namespace asset_proof_of_concept_demo_CSharp
 
     public class AssetManager
     {
+        #region Fields
+
         /// <summary>
         /// The instance.
         /// </summary>
         static readonly AssetManager _instance = new AssetManager();
+
+        /// <summary>
+        /// The assets.
+        /// </summary>
+        private Dictionary<String, IAsset> assets = new Dictionary<String, IAsset>();
+
+        /// <summary>
+        /// The identifier generator.
+        /// </summary>
+        private Int32 idGenerator = 0;
+
+        #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Explicit static constructor tells # compiler not to mark type as beforefieldinit.
@@ -35,14 +51,9 @@ namespace asset_proof_of_concept_demo_CSharp
             initEventSystem();
         }
 
-        private void initEventSystem()
-        {
-            pubsubz.define("EventSystem.Init");
+        #endregion Constructors
 
-            //! NOTE Unlike the JavaScript and Typescript versions (using a setTimeout) this call here will not trigger any event handling code.
-            // 
-            pubsubz.publish("EventSystem.Init', 'hello event!");
-        }
+        #region Properties
 
         /// <summary>
         /// Visible when reflecting.
@@ -59,15 +70,56 @@ namespace asset_proof_of_concept_demo_CSharp
             }
         }
 
-        /// <summary>
-        /// The assets.
-        /// </summary>
-        private Dictionary<String, IAsset> assets = new Dictionary<String, IAsset>();
+        #endregion Properties
+
+        #region Methods
 
         /// <summary>
-        /// The identifier generator.
+        /// Searches for the first asset by class.
         /// </summary>
-        private Int32 idGenerator = 0;
+        ///
+        /// <param name="claz"> The claz. </param>
+        ///
+        /// <returns>
+        /// The found asset by class.
+        /// </returns>
+        public IAsset findAssetByClass(String claz)
+        {
+            Regex mask = new Regex(String.Format(@"{0}_(\d+)", claz));
+
+            return assets.First(p => mask.IsMatch(p.Key)).Value;
+        }
+
+        /// <summary>
+        /// Searches for the first asset by identifier.
+        /// </summary>
+        ///
+        /// <param name="id"> The identifier. </param>
+        ///
+        /// <returns>
+        /// The found asset by identifier.
+        /// </returns>
+        public IAsset findAssetById(String id)
+        {
+            return assets[id];
+        }
+
+        /// <summary>
+        /// Searches for assets by class.
+        /// </summary>
+        ///
+        /// <param name="claz"> The claz. </param>
+        ///
+        /// <returns>
+        /// The found assets by class.
+        /// </returns>
+        public List<IAsset> findAssetsByClass(String claz)
+        {
+            Regex mask = new Regex(String.Format(@"{0}_(\d+)", claz));
+
+            // Return the values of all matching keys using the regex.
+            return assets.Where(p => mask.IsMatch(p.Key)).Select(p => p.Value).ToList();
+        }
 
         /// <summary>
         /// Registers the asset instance.
@@ -100,51 +152,15 @@ namespace asset_proof_of_concept_demo_CSharp
             return Id;
         }
 
-        /// <summary>
-        /// Searches for the first asset by identifier.
-        /// </summary>
-        ///
-        /// <param name="id"> The identifier. </param>
-        ///
-        /// <returns>
-        /// The found asset by identifier.
-        /// </returns>
-        public IAsset findAssetById(String id)
+        private void initEventSystem()
         {
-            return assets[id];
+            pubsubz.define("EventSystem.Init");
+
+            //! NOTE Unlike the JavaScript and Typescript versions (using a setTimeout) this call here will not trigger any event handling code.
+            //
+            pubsubz.publish("EventSystem.Init', 'hello event!");
         }
 
-        /// <summary>
-        /// Searches for the first asset by class.
-        /// </summary>
-        ///
-        /// <param name="claz"> The claz. </param>
-        ///
-        /// <returns>
-        /// The found asset by class.
-        /// </returns>
-        public IAsset findAssetByClass(String claz)
-        {
-            Regex mask = new Regex(String.Format(@"{0}_(\d+)", claz));
-
-            return assets.First(p => mask.IsMatch(p.Key)).Value;
-        }
-
-        /// <summary>
-        /// Searches for assets by class.
-        /// </summary>
-        ///
-        /// <param name="claz"> The claz. </param>
-        ///
-        /// <returns>
-        /// The found assets by class.
-        /// </returns>
-        public List<IAsset> findAssetsByClass(String claz)
-        {
-            Regex mask = new Regex(String.Format(@"{0}_(\d+)", claz));
-
-            // Return the values of all matching keys using the regex.
-            return assets.Where(p => mask.IsMatch(p.Key)).Select(p => p.Value).ToList();
-        }
+        #endregion Methods
     }
 }

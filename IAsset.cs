@@ -13,6 +13,8 @@ namespace asset_proof_of_concept_demo_CSharp
     /// </summary>
     public interface IAsset
     {
+        #region Properties
+
         /// <summary>
         /// Gets the class.
         /// </summary>
@@ -36,5 +38,7 @@ namespace asset_proof_of_concept_demo_CSharp
         {
             get;
         }
+
+        #endregion Properties
     }
 }

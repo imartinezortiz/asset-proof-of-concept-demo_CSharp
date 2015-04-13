@@ -12,11 +12,20 @@ namespace asset_proof_of_concept_demo_CSharp
 
     public static class pubsubz
     {
-        public delegate void TopicEvent(String topic, params object[] args);
-
-        private static Dictionary<String, Dictionary<String, TopicEvent>> topics = new Dictionary<String, Dictionary<String, TopicEvent>>();
+        #region Fields
 
         private static Int32 subUid = 0;
+        private static Dictionary<String, Dictionary<String, TopicEvent>> topics = new Dictionary<String, Dictionary<String, TopicEvent>>();
+
+        #endregion Fields
+
+        #region Delegates
+
+        public delegate void TopicEvent(String topic, params object[] args);
+
+        #endregion Delegates
+
+        #region Methods
 
         public static Boolean define(String topic)
         {
@@ -78,5 +87,7 @@ namespace asset_proof_of_concept_demo_CSharp
 
             return false;
         }
+
+        #endregion Methods
     }
 }
