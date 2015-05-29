@@ -20,32 +20,10 @@ namespace asset_proof_of_concept_demo_CSharp
         public Logger()
             : base()
         {
-            //! Subscribe once (and never unsubscribe) to implement default behavior.
-            //
-            OnLog += doLog;
+            // Nothing yet
         }
 
         #endregion Constructors
-
-        #region Delegates
-
-        /// <summary>
-        /// Logevents.
-        /// </summary>
-        ///
-        /// <param name="msg"> The message. </param>
-        public delegate void logevent(String msg);
-
-        #endregion Delegates
-
-        #region Events
-
-        /// <summary>
-        /// Occurs when log is called.
-        /// </summary>
-        public event logevent OnLog;
-
-        #endregion Events
 
         #region Methods
 
@@ -56,22 +34,17 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <param name="msg"> The message. </param>
         public void log(String msg)
         {
-            if (OnLog != null)
-            {
-                OnLog(msg);
-            }
-        }
+            //! See what bridge code to call, Asset, Asset Manager or just expose Default behavior (if any).
 
-        /// <summary>
-        /// Logs only if there is only one subscriber (so default behavior is needed).
-        /// </summary>
-        ///
-        /// <param name="msg"> The message. </param>
-        private void doLog(String msg)
-        {
-            //! If we're the only subscriber, we expose default behavior.
-            //
-            if (OnLog.GetInvocationList().Length == 1)
+            if (Bridge != null && Bridge is ILogger)
+            {
+                (Bridge as ILogger).doLog(msg);
+            }
+            else if (AssetManager.Instance.Bridge != null && AssetManager.Instance.Bridge is ILogger)
+            {
+                (AssetManager.Instance.Bridge as ILogger).doLog(msg);
+            }
+            else
             {
                 Console.WriteLine(msg);
             }

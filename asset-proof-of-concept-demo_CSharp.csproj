@@ -43,8 +43,11 @@
   <ItemGroup>
     <Compile Include="Asset.cs" />
     <Compile Include="AssetManager.cs" />
+    <Compile Include="BaseAsset.cs" />
+    <Compile Include="Bridge.cs" />
     <Compile Include="DialogueAsset.cs" />
     <Compile Include="IAsset.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +57,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="README.txt" />
     <Content Include="script.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

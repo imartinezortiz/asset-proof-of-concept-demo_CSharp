@@ -31,6 +31,8 @@ namespace asset_proof_of_concept_demo_CSharp
 
         /// <summary>
         /// Test if asset1 can find the Logger (asset3) thru the AssetManager.
+        /// 
+        /// This method can be called by the Game Engine.
         /// </summary>
         ///
         /// <remarks>

@@ -18,6 +18,16 @@ namespace asset_proof_of_concept_demo_CSharp
     class Program
     {
         /// <summary>
+        /// The first bridge.
+        /// </summary>
+        static Bridge bridge1 = new Bridge("global bridge: ");
+
+        /// <summary>
+        /// The second bridge.
+        /// </summary>
+        static Bridge bridge2 = new Bridge("private bridge: ");
+
+        /// <summary>
         /// Handler, called when my event.
         /// </summary>
         ///
@@ -89,12 +99,27 @@ namespace asset_proof_of_concept_demo_CSharp
 
             //! TODO Implement replacing method behavior.
             //
-            // Replace the 2nd Logger's log method by a native version supplied by the Game Engine. 
-            asset4.OnLog += myLogger; //or cc.log in Cocos2D-html5; 
+
+            // Replace the both Logger's log method by a native version supplied by the Game Engine.
+            // 
+            AssetManager.Instance.Bridge = bridge1;
+
+            // Check the results for both Loggers are alike. 
+            // 
+            asset1.publicMethod("Hello Different World (Game Engine Logging)");
+
+            // Replace the 1st Logger's log method by a native version supplied by the Game Engine. 
+            // 
+            asset3.Bridge = bridge2;
 
             // Check the results for both Loggers differ (one message goes to the console, the other shows as an alert). 
             // 
-            asset1.publicMethod("Hello Different World (Mixed Logging)");
+            asset1.publicMethod("Hello Different World (Game Engine Logging)");
+
+            //! Reset/Remove Both Bridges
+            // 
+            asset3.Bridge = null;
+            AssetManager.Instance.Bridge = null;
 
             //! Event Subscription.
             // 

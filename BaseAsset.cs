@@ -16,6 +16,9 @@ namespace asset_proof_of_concept_demo_CSharp
     {
         #region Fields
 
+        /// <summary>
+        /// The test subscription.
+        /// </summary>
         private String testSubscription;
 
         #endregion Fields
@@ -68,6 +71,19 @@ namespace asset_proof_of_concept_demo_CSharp
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// Gets or sets the bridge.
+        /// </summary>
+        ///
+        /// <value>
+        /// The bridge.
+        /// </value>
+        public object Bridge
+        {
+            get;
+            set;
         }
 
         #endregion Properties

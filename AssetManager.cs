@@ -70,6 +70,19 @@ namespace asset_proof_of_concept_demo_CSharp
             }
         }
 
+        /// <summary>
+        /// Gets or sets the bridge.
+        /// </summary>
+        ///
+        /// <value>
+        /// The bridge.
+        /// </value>
+        public object Bridge
+        {
+            get;
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
