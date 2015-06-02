@@ -7,6 +7,7 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
 
     /// <summary>
@@ -14,6 +15,8 @@ namespace asset_proof_of_concept_demo_CSharp
     /// </summary>
     public class Asset : BaseAsset
     {
+        private Dictionary<String, String> FileStorage = new Dictionary<String, String>();
+
         #region Constructors
 
         /// <summary>
@@ -51,6 +54,113 @@ namespace asset_proof_of_concept_demo_CSharp
                 foreach (IAsset l in loggers)
                 {
                     (l as Logger).log(l.Id + " - " + msg);
+                }
+            }
+        }
+
+        String fId1 = "Hello1.txt";
+        String fId2 = "Hello2.txt";
+
+        String fData = "Hello Storage World";
+
+        /// <summary>
+        /// Gets data store.
+        /// </summary>
+        ///
+        /// <returns>
+        /// The data store.
+        /// </returns>
+        private IDataStorage getDataStore()
+        {
+            if (Bridge != null && Bridge is IDataStorage)
+            {
+                return (Bridge as IDataStorage);
+            }
+            else if (AssetManager.Instance.Bridge != null && AssetManager.Instance.Bridge is IDataStorage)
+            {
+                return (AssetManager.Instance.Bridge as IDataStorage);
+
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Executes the store operation.
+        /// </summary>
+        public void doStore()
+        {
+            IDataStorage ds = getDataStore();
+
+            if (ds != null)
+            {
+                ds.Save(fId1, fData);
+                ds.Save(fId2, fData);
+            }
+            else
+            {
+                FileStorage[fId1] = fData;
+                FileStorage[fId2] = fData;
+            }
+        }
+
+        /// <summary>
+        /// Executes the remove operation.
+        /// </summary>
+        public void doRemove()
+        {
+            IDataStorage ds = getDataStore();
+
+            if (ds != null)
+            {
+                ds.Delete(fId1);
+            }
+            else
+            {
+                FileStorage.Remove(fId1);
+            }
+        }
+
+        /// <summary>
+        /// Executes the remove operation.
+        /// </summary>
+        public void doArchive()
+        {
+            IDataStorage ds = getDataStore();
+
+            if (ds != null)
+            {
+                ds.Archive(fId2);
+            }
+            else
+            {
+                FileStorage.Remove(fId2);
+            }
+        }
+
+        /// <summary>
+        /// Executes the list operation.
+        /// </summary>
+        public void doList()
+        {
+            IDataStorage ds = getDataStore();
+
+            if (ds != null)
+            {
+                Console.WriteLine("----[bridge]-----");
+
+                foreach (String fn in ds.Files())
+                {
+                    Console.WriteLine("{0}={1}", fn, ds.Load(fn));
+                }
+            }
+            else
+            {
+                Console.WriteLine("----[default]-----");
+
+                foreach (String fn in FileStorage.Keys)
+                {
+                    Console.WriteLine("{0}={1}", fn, FileStorage[fn]);
                 }
             }
         }

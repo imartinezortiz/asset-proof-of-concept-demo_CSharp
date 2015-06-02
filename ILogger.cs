@@ -14,9 +14,14 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <summary>
         /// The prefix.
         /// </summary>
-        String prefix
+        ///
+        /// <value>
+        /// The prefix.
+        /// </value>
+        String Prefix
         {
             get;
+            set;
         }
 
         /// <summary>

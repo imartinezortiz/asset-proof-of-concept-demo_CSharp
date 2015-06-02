@@ -25,7 +25,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <summary>
         /// The second bridge.
         /// </summary>
-        static Bridge bridge2 = new Bridge("private bridge: ");
+        static Bridge bridge2 = new Bridge();
 
         /// <summary>
         /// Handler, called when my event.
@@ -83,6 +83,8 @@ namespace asset_proof_of_concept_demo_CSharp
             Logger asset4 = new Logger();
             DialogueAsset asset5 = new DialogueAsset();
 
+            bridge2.Prefix = "private bridge: ";
+
             asset3.log("Asset1: " + asset1.Class + ", " + asset1.Id);
             asset3.log("Asset2: " + asset2.Class + ", " + asset2.Id);
             asset3.log("Asset3: " + asset3.Class + ", " + asset3.Id);
@@ -116,10 +118,31 @@ namespace asset_proof_of_concept_demo_CSharp
             // 
             asset1.publicMethod("Hello Different World (Game Engine Logging)");
 
+            asset2.doStore();   // Create Hello1.txt and Hello2.txt
+            asset2.doList();    // List
+            asset2.doRemove();  // Remove Hello1.txt
+            asset2.doList();    // List
+            asset2.doArchive(); // Move Hello2.txt
+
             //! Reset/Remove Both Bridges
             // 
             asset3.Bridge = null;
+
             AssetManager.Instance.Bridge = null;
+
+            asset2.doList();
+            asset2.doStore();
+
+            asset2.Bridge = bridge2;
+
+            asset2.doStore();
+            asset2.doList();
+
+            asset2.Bridge = null;
+            
+            asset2.doList();
+
+            #region EventSubscription
 
             //! Event Subscription.
             // 
@@ -165,6 +188,8 @@ namespace asset_proof_of_concept_demo_CSharp
                 pubsubz.unsubscribe(eventId);
             }
 
+            #endregion EventSubscription
+
             //! Check if id and class can still be changed (shouldn't). 
             // 
             //asset4.Id = "XYY1Z"; 
@@ -174,6 +199,8 @@ namespace asset_proof_of_concept_demo_CSharp
             //! Test if we can re-register without creating new stuff in the register (i.e. get the existing unique id returned). 
             // 
             Console.WriteLine("Trying to re-register: {0}", AssetManager.Instance.registerAssetInstance(asset4, asset4.Class));
+
+            #region DialogAsset
 
             //! DialogAsset.
             // 
@@ -192,6 +219,8 @@ namespace asset_proof_of_concept_demo_CSharp
             asset5.interact("me", "player", 6); //Answer id 6 
 
             asset5.interact("me", "player");
+
+            #endregion DialogAsset
 
             Console.ReadKey();
         }
