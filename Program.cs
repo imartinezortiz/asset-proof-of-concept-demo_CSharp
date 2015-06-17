@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="RAGE">
+// <copyright file="Program.cs" company="RAGE">
 // Copyright (c) 2015 RAGE. All rights reserved.
 // </copyright>
 // <author>Veg</author>
@@ -7,10 +7,7 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// A program.
@@ -42,11 +39,6 @@ namespace asset_proof_of_concept_demo_CSharp
             Console.WriteLine("[demo.html].{0}: [{1}]", topic, ArgsToString(args));
         }
 
-        public static void myLogger(String msg)
-        {
-            Console.WriteLine("Custom Logging: {0}", msg);
-        }
-
         /// <summary>
         /// Arguments to String.
         /// </summary>
@@ -64,7 +56,7 @@ namespace asset_proof_of_concept_demo_CSharp
             }
             else
             {
-                return String.Join(";", args.Select(p => p.ToString()));
+                return String.Join(";", args.Select(p => p.ToString()).ToArray());
             }
         }
 
@@ -118,6 +110,8 @@ namespace asset_proof_of_concept_demo_CSharp
             // 
             asset1.publicMethod("Hello Different World (Game Engine Logging)");
 
+            #region IDataStorage and IDataArchive
+
             asset2.doStore();   // Create Hello1.txt and Hello2.txt
             asset2.doList();    // List
             asset2.doRemove();  // Remove Hello1.txt
@@ -139,8 +133,10 @@ namespace asset_proof_of_concept_demo_CSharp
             asset2.doList();
 
             asset2.Bridge = null;
-            
+
             asset2.doList();
+
+            #endregion IDataStorage and IDataArchive
 
             #region EventSubscription
 

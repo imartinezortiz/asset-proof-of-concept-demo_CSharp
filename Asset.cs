@@ -64,33 +64,11 @@ namespace asset_proof_of_concept_demo_CSharp
         String fData = "Hello Storage World";
 
         /// <summary>
-        /// Gets data store.
-        /// </summary>
-        ///
-        /// <returns>
-        /// The data store.
-        /// </returns>
-        private IDataStorage getDataStore()
-        {
-            if (Bridge != null && Bridge is IDataStorage)
-            {
-                return (Bridge as IDataStorage);
-            }
-            else if (AssetManager.Instance.Bridge != null && AssetManager.Instance.Bridge is IDataStorage)
-            {
-                return (AssetManager.Instance.Bridge as IDataStorage);
-
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Executes the store operation.
         /// </summary>
         public void doStore()
         {
-            IDataStorage ds = getDataStore();
+            IDataStorage ds = getInterface<IDataStorage>();
 
             if (ds != null)
             {
@@ -109,7 +87,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// </summary>
         public void doRemove()
         {
-            IDataStorage ds = getDataStore();
+            IDataStorage ds = getInterface<IDataStorage>();
 
             if (ds != null)
             {
@@ -126,7 +104,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// </summary>
         public void doArchive()
         {
-            IDataStorage ds = getDataStore();
+            IDataArchive ds = getInterface<IDataArchive>();
 
             if (ds != null)
             {
@@ -143,7 +121,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// </summary>
         public void doList()
         {
-            IDataStorage ds = getDataStore();
+            IDataStorage ds = getInterface<IDataStorage>();
 
             if (ds != null)
             {

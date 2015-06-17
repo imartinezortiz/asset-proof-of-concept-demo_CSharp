@@ -1,4 +1,9 @@
-﻿namespace asset_proof_of_concept_demo_CSharp
+﻿// <copyright file="Bridge.cs" company="RAGE"> Copyright (c) 2015 RAGE. All rights reserved.
+// </copyright>
+// <author>Veg</author>
+// <date>13-4-2015</date>
+// <summary>Implements a Bridge with 3 interfaces</summary>
+namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
     using System.Collections.Generic;
@@ -8,7 +13,7 @@
     /// <summary>
     /// A bridge.
     /// </summary>
-    class Bridge : ILogger, IDataStorage
+    class Bridge : ILogger, IDataStorage, IDataArchive
     {
         const String StorageDir = @".\DataStorage";
         const String ArchiveDir = @".\Archive";
@@ -53,6 +58,8 @@
         /// <param name="msg"> The message. </param>
         public void doLog(string msg)
         {
+            //! Microsoft .Net Specific Code.
+            // 
             Console.WriteLine(Prefix + msg);
         }
 
@@ -96,8 +103,13 @@
         /// </returns>
         public List<String> Files()
         {
-            return Directory.EnumerateFiles(StorageDir).ToList().ConvertAll(
-                new Converter<String, String>(p => p.Replace(StorageDir + @"\", ""))).ToList();
+            return Directory.GetFiles(StorageDir).ToList().ConvertAll(
+    new Converter<String, String>(p => p.Replace(StorageDir + @"\", ""))).ToList();
+
+            //! EnumerateFiles not supported in Unity3D.
+            // 
+            //return Directory.EnumerateFiles(StorageDir).ToList().ConvertAll(
+            //    new Converter<String, String>(p => p.Replace(StorageDir + @"\", ""))).ToList();
         }
 
         /// <summary>
@@ -145,6 +157,10 @@
 
             return false;
         }
+
+        #endregion
+
+        #region IDataArchive Members
 
         /// <summary>
         /// Archives the given file.

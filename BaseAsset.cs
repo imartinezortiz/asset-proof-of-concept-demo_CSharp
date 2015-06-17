@@ -7,10 +7,6 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class BaseAsset : IAsset
     {
@@ -87,5 +83,24 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         #endregion Properties
+
+        #region Methods
+
+        internal T getInterface<T>()
+        {
+            if (Bridge != null && Bridge is T)
+            {
+                return (T)Bridge;
+            }
+            else if (AssetManager.Instance.Bridge != null && AssetManager.Instance.Bridge is T)
+            {
+                return (T)(AssetManager.Instance.Bridge);
+
+            }
+
+            return default(T);
+        }
+
+        #endregion Methods
     }
 }

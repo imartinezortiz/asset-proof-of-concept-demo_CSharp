@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+// <copyright file="ILogger.cs" company="RAGE"> Copyright (c) 2015 RAGE. All rights reserved.
+// </copyright>
+// <author>Veg</author>
+// <date>13-4-2015</date>
+// <summary>defines the logger interface</summary>
 namespace asset_proof_of_concept_demo_CSharp
 {
+    using System;
+    
     /// <summary>
     /// Interface for logger.
     /// </summary>

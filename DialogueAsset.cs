@@ -11,7 +11,7 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.IO;
     using System.Linq;
 
-    class DialogueAsset : Asset
+    class DialogueAsset : BaseAsset
     {
         #region Fields
 
