@@ -7,6 +7,7 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Interface for asset.
@@ -35,6 +36,42 @@ namespace asset_proof_of_concept_demo_CSharp
         /// The identifier.
         /// </value>
         String Id
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        ///
+        /// <value>
+        /// The version.
+        /// </value>
+        String Version
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the maturity.
+        /// </summary>
+        ///
+        /// <value>
+        /// The maturity.
+        /// </value>
+        String Maturity
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the dependencies.
+        /// </summary>
+        ///
+        /// <value>
+        /// The dependencies (A Dictionary of class=version pairs).
+        /// </value>
+        Dictionary<String, String> Dependencies
         {
             get;
         }

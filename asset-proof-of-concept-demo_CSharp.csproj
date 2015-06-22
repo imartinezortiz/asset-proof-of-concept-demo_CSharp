@@ -58,12 +58,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="VersionAndDependencies.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DialogueAsset.VersionAndDependencies.xml" />
+    <EmbeddedResource Include="Logger.VersionAndDependencies.xml" />
+    <EmbeddedResource Include="Asset.VersionAndDependencies.xml" />
     <Content Include="README.txt" />
     <Content Include="script.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="BaseAsset.VersionAndDependencies.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

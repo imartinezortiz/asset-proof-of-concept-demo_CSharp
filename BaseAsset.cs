@@ -7,6 +7,11 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
 
     public class BaseAsset : IAsset
     {
@@ -35,6 +40,12 @@ namespace asset_proof_of_concept_demo_CSharp
                 //This code fails in TypeScript (coded there as 'this.Id') as this points to the method and not the Asset.
                 Console.WriteLine("[{0}].{1}: {2}", this.Id, topics, data);
             });
+
+            //! List Embedded Resources.
+            //foreach (String name in Assembly.GetExecutingAssembly().GetManifestResourceNames())
+            //{
+            //    Console.WriteLine("{0}", name);
+            //}
         }
 
         #endregion Constructors
@@ -82,10 +93,80 @@ namespace asset_proof_of_concept_demo_CSharp
             set;
         }
 
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        ///
+        /// <value>
+        /// The version.
+        /// </value>
+        public String Version
+        {
+            get
+            {
+                XDocument versionXml = VersionAndDependencies();
+
+                return String.Format("{0}.{1}.{2}.{3}",
+                    XmlTagValue(versionXml, "version/major"),
+                    XmlTagValue(versionXml, "version/minor"),
+                    XmlTagValue(versionXml, "version/build"),
+                    XmlTagValue(versionXml, "version/revision")).TrimEnd('.');
+            }
+        }
+
+        /// <summary>
+        /// Gets the maturity.
+        /// </summary>
+        ///
+        /// <value>
+        /// The maturity.
+        /// </value>
+        public String Maturity
+        {
+            get
+            {
+                return XmlTagValue(VersionAndDependencies(), "version/maturity");
+            }
+        }
+
+        /// <summary>
+        /// Gets the dependencies.
+        /// </summary>
+        ///
+        /// <value>
+        /// The dependencies.
+        /// </value>
+        public Dictionary<String, String> Dependencies
+        {
+            get
+            {
+                Dictionary<String, String> dependencies = new Dictionary<String, String>();
+
+                foreach (XElement dependency in VersionAndDependencies().XPathSelectElements("version/dependencies/depends"))
+                {
+                    String minv = dependency.Attribute("minVersion") != null ? dependency.Attribute("minVersion").Value : "0.0";
+                    String maxv = dependency.Attribute("maxVersion") != null ? dependency.Attribute("maxVersion").Value : "*";
+
+                    dependencies.Add(dependency.Value, String.Format("{0}-{1},", minv, maxv));
+                }
+
+                return dependencies;
+            }
+        }
+
         #endregion Properties
 
         #region Methods
 
+        /// <summary>
+        /// Gets the interface.
+        /// </summary>
+        ///
+        /// <typeparam name="T"> Generic type parameter. </typeparam>
+        ///
+        /// <returns>
+        /// The interface.
+        /// </returns>
         internal T getInterface<T>()
         {
             if (Bridge != null && Bridge is T)
@@ -99,6 +180,56 @@ namespace asset_proof_of_concept_demo_CSharp
             }
 
             return default(T);
+        }
+
+        /// <summary>
+        /// XML tag value.
+        /// </summary>
+        ///
+        /// <param name="doc">   The document. </param>
+        /// <param name="xpath"> The xpath. </param>
+        ///
+        /// <returns>
+        /// A String.
+        /// </returns>
+        private String XmlTagValue(XDocument doc, String xpath)
+        {
+            if (doc.XPathSelectElement(xpath) != null)
+            {
+                return doc.XPathSelectElement(xpath).Value;
+            }
+            return String.Empty;
+        }
+
+        /// <summary>
+        /// Version and dependencies.
+        /// </summary>
+        ///
+        /// <returns>
+        /// An XDocument.
+        /// </returns>
+        internal XDocument VersionAndDependencies()
+        {
+            return XDocument.Parse(
+                GetEmbeddedResource(GetType().Namespace, String.Format(String.Format("{0}.VersionAndDependencies.xml", GetType().Name))));
+        }
+
+        /// <summary>
+        /// Gets embedded resource.
+        /// </summary>
+        ///
+        /// <param name="ns">  The namespace. </param>
+        /// <param name="res"> The resource name. </param>
+        ///
+        /// <returns>
+        /// The embedded resource.
+        /// </returns>
+        protected String GetEmbeddedResource(String ns, String res)
+        {
+            using (StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(String.Format("{0}.{1}", ns, res))))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
         #endregion Methods

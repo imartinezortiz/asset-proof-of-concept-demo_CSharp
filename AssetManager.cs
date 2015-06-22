@@ -165,6 +165,38 @@ namespace asset_proof_of_concept_demo_CSharp
             return Id;
         }
 
+        public void reportVersionAndDependencies()
+        {
+            foreach (KeyValuePair<String, IAsset> asset in assets)
+            {
+                Console.WriteLine("[{0}]\r\n{1}=v{2}\t;{3}", asset.Key, asset.Value.Class, asset.Value.Version, asset.Value.Maturity);
+                Int32 cnt = 1;
+                foreach (KeyValuePair<String, String> dependency in asset.Value.Dependencies)
+                {
+                    //! Better version matches (see Microsoft).
+                    // 
+                    //! https://msdn.microsoft.com/en-us/library/system.version(v=vs.110).aspx
+                    //
+                    //! dependency.value has min-max format (inclusive) like:
+                    // 
+                    //? v1.2.3-*        (v1.2.3 or higher)
+                    //? v0.0-*          (all versions)
+                    //? v1.2.3-v2.2     (v1.2.3 or higher less than or equal to v2.1)
+                    //
+                    Boolean found = false;
+                    foreach (IAsset dep in findAssetsByClass(dependency.Key))
+                    {
+                        if (dep.Class.Equals(dependency.Key) && dep.Version.Equals(dependency.Value))
+                        {
+                            found = true;
+                        }
+                    }
+
+                    Console.WriteLine("Dependency_{0}={1} v{2}\t;{3}", cnt++, dependency.Key, dependency.Value, found ? "ok" : "missing");
+                }
+            }
+        }
+
         private void initEventSystem()
         {
             pubsubz.define("EventSystem.Init");

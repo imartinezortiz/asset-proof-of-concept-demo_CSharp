@@ -7,7 +7,12 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
+    using System.Reflection;
+    using System.Xml.Linq;
+    using System.Xml.XPath;
 
     /// <summary>
     /// A program.
@@ -67,12 +72,49 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <param name="args"> A variable-length parameters list containing arguments. </param>
         static void Main(string[] cargs)
         {
+            //! See https://msdn.microsoft.com/en-us/library/system.version(v=vs.110).aspx
+
+            //! major.minor[.build[.revision]]
+            //!
+            //! The components are used by convention as follows:
+            //!
+            //! Major:    Assemblies with the same name but different major versions are not interchangeable.
+            //!           A higher version number might indicate a major rewrite of a product where backward
+            //!           compatibility cannot be assumed.
+            //! Minor:    If the name and major version number on two assemblies are the same,
+            //!           but the minor version number is different, this indicates significant enhancement with
+            //!           the intention of backward compatibility.
+            //!           This higher minor version number might indicate a point
+            //!           release of a product or a fully backward-compatible new version of a product.
+            //! Build:    A difference in build number represents a recompilation of the same source.
+            //!           Different build numbers might be used when the processor, platform, or compiler changes.
+            //! Revision: Assemblies with the same name, major, and minor version numbers but different revisions
+            //!           are intended to be fully interchangeable. A higher revision number might be used in a
+            //!           build that fixes a security hole in a previously released assembly.
+            //!
+            //! For two versions to be equal, the major, minor, build, and revision numbers of the first Version
+            //! object must be identical to those of the second Version object. If the build or revision number
+            //! of a Version object is undefined, that Version object is considered to be earlier than a Version
+            //! object whose build or revision number is equal to zero. The following example illustrates this
+            //! by comparing three Version objects that have undefined version components.
+
+
+            // 12.0.0.0
+            // Major.Minor.Build.Revision.
+            //Console.WriteLine("{0}", Assembly.GetCallingAssembly().GetName().Version);
+
+            // CLR Version 4.0.30319.34209
+            //Version ver = Environment.Version;
+            //Debug.Print("CLR Version {0}", ver.ToString());
+
             //! Add assets and automatically create the Asset Manager. 
             // 
             Asset asset1 = new Asset();
             Asset asset2 = new Asset();
+
             Logger asset3 = new Logger();
             Logger asset4 = new Logger();
+
             DialogueAsset asset5 = new DialogueAsset();
 
             bridge2.Prefix = "private bridge: ";
@@ -82,6 +124,28 @@ namespace asset_proof_of_concept_demo_CSharp
             asset3.log("Asset3: " + asset3.Class + ", " + asset3.Id);
             asset3.log("Asset4: " + asset4.Class + ", " + asset4.Id);
             asset3.log("Asset5: " + asset5.Class + ", " + asset5.Id);
+
+            //XDocument versionXml = asset1.VersionAndDependencies();
+            //Console.WriteLine(versionXml.ToString());
+
+            //IEnumerable<XElement> dependencies = versionXml.XPathSelectElements("version/dependencies/depends");
+            //foreach (XElement dependency in dependencies)
+            //{
+            //    Console.WriteLine("Depends {0}", dependency.Value);
+            //}
+
+            Console.WriteLine(String.Empty);
+            Console.WriteLine("Asset {0} v{1}", asset1.Class, asset1.Version);
+            foreach (KeyValuePair<String, String> dependency in asset1.Dependencies)
+            {
+                Console.WriteLine("Depends on {0} v{1}", dependency.Key, dependency.Value);
+            }
+            Console.WriteLine(String.Empty);
+
+            AssetManager.Instance.reportVersionAndDependencies();
+            Console.WriteLine("Version: v{0}", asset1.Version);
+
+            Console.WriteLine(String.Empty);
 
             // Use the new Logger directly. 
             // 
