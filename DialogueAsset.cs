@@ -292,6 +292,52 @@ namespace asset_proof_of_concept_demo_CSharp
 
         #endregion Methods
 
+        #region Properties
+
+        public override String Version
+        {
+            get
+            {
+                return "1.2.3.25";
+            }
+        }
+
+        /// <summary>
+        /// Gets the maturity.
+        /// </summary>
+        ///
+        /// <value>
+        /// The maturity.
+        /// </value>
+        public override String Maturity
+        {
+            get
+            {
+                return "beta";
+            }
+        }
+
+        /// <summary>
+        /// Gets the dependencies.
+        /// </summary>
+        ///
+        /// <value>
+        /// The dependencies.
+        /// </value>
+        public override Dictionary<String, String> Dependencies
+        {
+            get
+            {
+                Dictionary<String, String> dependencies = new Dictionary<String, String>();
+
+                dependencies.Add(typeof(Logger).Name, String.Format("{0}-{1}", "1.3.3", "1.4.5"));
+
+                return dependencies;
+            }
+        }
+
+        #endregion Properties
+
         #region Nested Types
 
         /// <summary>

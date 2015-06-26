@@ -51,6 +51,7 @@
     <Compile Include="IDataArchive.cs" />
     <Compile Include="IDataStorage.cs" />
     <Compile Include="ILogger.cs" />
+    <Compile Include="IVersion.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -65,7 +66,9 @@
   <ItemGroup>
     <EmbeddedResource Include="DialogueAsset.VersionAndDependencies.xml" />
     <EmbeddedResource Include="Logger.VersionAndDependencies.xml" />
-    <EmbeddedResource Include="Asset.VersionAndDependencies.xml" />
+    <EmbeddedResource Include="Asset.VersionAndDependencies.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="README.txt" />
     <Content Include="script.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

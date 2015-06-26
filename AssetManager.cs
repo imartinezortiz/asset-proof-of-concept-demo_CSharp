@@ -165,12 +165,22 @@ namespace asset_proof_of_concept_demo_CSharp
             return Id;
         }
 
+        /// <summary>
+        /// Reports version and dependencies.
+        /// </summary>
         public void reportVersionAndDependencies()
         {
+            const Int32 col1w = 40;
+            const Int32 col2w = 32;
+
+            Console.WriteLine(String.Format("{0}{1}", "Asset".PadRight(col1w), "Depends on"));
+            Console.WriteLine(String.Format("{0}+{1}", "".PadRight(col1w - 1, '-'), "".PadRight(col2w, '-')));
+
             foreach (KeyValuePair<String, IAsset> asset in assets)
             {
-                Console.WriteLine("[{0}]\r\n{1}=v{2}\t;{3}", asset.Key, asset.Value.Class, asset.Value.Version, asset.Value.Maturity);
-                Int32 cnt = 1;
+                Console.Write(String.Format("{0} v{1}", asset.Value.Class, asset.Value.Version).PadRight(40));
+
+                Int32 cnt = 0;
                 foreach (KeyValuePair<String, String> dependency in asset.Value.Dependencies)
                 {
                     //! Better version matches (see Microsoft).
@@ -183,20 +193,63 @@ namespace asset_proof_of_concept_demo_CSharp
                     //? v0.0-*          (all versions)
                     //? v1.2.3-v2.2     (v1.2.3 or higher less than or equal to v2.1)
                     //
+                    String[] vrange = dependency.Value.Split('-');
+
+                    Version low = new Version(vrange[0]);
+
+                    Version hi;
+
+                    switch (vrange.Length)
+                    {
+                        case 2:
+                            if (vrange[1].Equals("*"))
+                            {
+                                hi = new Version(99, 99);
+                            }
+                            else
+                            {
+                                hi = new Version(vrange[1]);
+                            }
+                            break;
+
+                        default:
+                            hi = low;
+                            break;
+                    }
+
                     Boolean found = false;
+
                     foreach (IAsset dep in findAssetsByClass(dependency.Key))
                     {
-                        if (dep.Class.Equals(dependency.Key) && dep.Version.Equals(dependency.Value))
+                        Version vdep = new Version(dep.Version);
+                        if (low <= vdep && vdep <= hi)
                         {
                             found = true;
                         }
                     }
 
-                    Console.WriteLine("Dependency_{0}={1} v{2}\t;{3}", cnt++, dependency.Key, dependency.Value, found ? "ok" : "missing");
+                    Console.WriteLine(String.Format("|{0} v{1} [{2}]", dependency.Key, dependency.Value, found ? "resolved" : "missing"));
+
+                    if (cnt != 0)
+                    {
+                        Console.Write("".PadRight(col1w));
+                    }
+
+                    cnt++;
+                }
+
+                if (cnt == 0)
+                {
+                    Console.WriteLine(String.Format("|{0}", "No dependencies"));
                 }
             }
+
+            Console.WriteLine(String.Format("{0}+{1}", "".PadRight(col1w - 1, '-'), "".PadRight(col2w, '-')));
         }
 
+        /// <summary>
+        /// Initialises the event system.
+        /// </summary>
         private void initEventSystem()
         {
             pubsubz.define("EventSystem.Init");

@@ -19,6 +19,33 @@ namespace asset_proof_of_concept_demo_CSharp
     /// </summary>
     class Program
     {
+        #region Fields
+
+        /// <summary>
+        /// The first asset.
+        /// </summary>
+        static Asset asset1;
+
+        /// <summary>
+        /// The second asset.
+        /// </summary>
+        static Asset asset2;
+
+        /// <summary>
+        /// The third asset.
+        /// </summary>
+        static Logger asset3;
+
+        /// <summary>
+        /// The fourth asset.
+        /// </summary>
+        static Logger asset4;
+
+        /// <summary>
+        /// The fifth asset.
+        /// </summary>
+        static DialogueAsset asset5;
+
         /// <summary>
         /// The first bridge.
         /// </summary>
@@ -29,20 +56,9 @@ namespace asset_proof_of_concept_demo_CSharp
         /// </summary>
         static Bridge bridge2 = new Bridge();
 
-        /// <summary>
-        /// Handler, called when my event.
-        /// </summary>
-        ///
-        /// <remarks>
-        /// NOTE: Only static because the console programs Main is static too.
-        /// </remarks>
-        ///
-        /// <param name="topic"> The topic. </param>
-        /// <param name="args">  A variable-length parameters list containing arguments. </param>
-        public static void MyEventHandler(String topic, params object[] args)
-        {
-            Console.WriteLine("[demo.html].{0}: [{1}]", topic, ArgsToString(args));
-        }
+        #endregion Fields
+
+        #region Methods
 
         /// <summary>
         /// Arguments to String.
@@ -66,11 +82,77 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         /// <summary>
+        /// Handler, called when my event.
+        /// </summary>
+        ///
+        /// <remarks>
+        /// NOTE: Only static because the console programs Main is static too.
+        /// </remarks>
+        ///
+        /// <param name="topic"> The topic. </param>
+        /// <param name="args">  A variable-length parameters list containing arguments. </param>
+        public static void MyEventHandler(String topic, params object[] args)
+        {
+            Console.WriteLine("[demo.html].{0}: [{1}]", topic, ArgsToString(args));
+        }
+
+        /// <summary>
         /// Main entry-point for this application.
         /// </summary>
         ///
         /// <param name="args"> A variable-length parameters list containing arguments. </param>
         static void Main(string[] cargs)
+        {
+            Test_01_Setup();
+
+            Test_02_VersionAndDependenciesReport();
+
+            Test_03_AssetToAssetAndBridge();
+
+            Test_04_DataStorageAndArchive();
+
+            Test_05_EventSubscription();
+
+            Test_06_SanityChecks();
+
+            Test_07_DialogueAsset();
+
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Tests 01 setup.
+        /// </summary>
+        private static void Test_01_Setup()
+        {
+            AssetManager.Instance.Bridge = bridge2;
+
+            //! Add assets and automatically create the Asset Manager.
+            //
+            asset1 = new Asset();
+            asset2 = new Asset();
+
+            asset3 = new Logger();
+            asset4 = new Logger();
+
+            asset5 = new DialogueAsset();
+
+            bridge2.Prefix = "private bridge: ";
+
+            // For Unity3D we need a bridge as Console.WriteLine is not supported and we have to use Debug.log() instead!
+            asset3.Bridge = bridge2;
+
+            asset3.log("Asset1: " + asset1.Class + ", " + asset1.Id);
+            asset3.log("Asset2: " + asset2.Class + ", " + asset2.Id);
+            asset3.log("Asset3: " + asset3.Class + ", " + asset3.Id);
+            asset3.log("Asset4: " + asset4.Class + ", " + asset4.Id);
+            asset3.log("Asset5: " + asset5.Class + ", " + asset5.Id);
+        }
+
+        /// <summary>
+        /// Tests 02 version and dependencies report.
+        /// </summary>
+        private static void Test_02_VersionAndDependenciesReport()
         {
             //! See https://msdn.microsoft.com/en-us/library/system.version(v=vs.110).aspx
 
@@ -98,7 +180,6 @@ namespace asset_proof_of_concept_demo_CSharp
             //! object whose build or revision number is equal to zero. The following example illustrates this
             //! by comparing three Version objects that have undefined version components.
 
-
             // 12.0.0.0
             // Major.Minor.Build.Revision.
             //Console.WriteLine("{0}", Assembly.GetCallingAssembly().GetName().Version);
@@ -107,23 +188,6 @@ namespace asset_proof_of_concept_demo_CSharp
             //Version ver = Environment.Version;
             //Debug.Print("CLR Version {0}", ver.ToString());
 
-            //! Add assets and automatically create the Asset Manager. 
-            // 
-            Asset asset1 = new Asset();
-            Asset asset2 = new Asset();
-
-            Logger asset3 = new Logger();
-            Logger asset4 = new Logger();
-
-            DialogueAsset asset5 = new DialogueAsset();
-
-            bridge2.Prefix = "private bridge: ";
-
-            asset3.log("Asset1: " + asset1.Class + ", " + asset1.Id);
-            asset3.log("Asset2: " + asset2.Class + ", " + asset2.Id);
-            asset3.log("Asset3: " + asset3.Class + ", " + asset3.Id);
-            asset3.log("Asset4: " + asset4.Class + ", " + asset4.Id);
-            asset3.log("Asset5: " + asset5.Class + ", " + asset5.Id);
 
             //XDocument versionXml = asset1.VersionAndDependencies();
             //Console.WriteLine(versionXml.ToString());
@@ -143,75 +207,112 @@ namespace asset_proof_of_concept_demo_CSharp
             Console.WriteLine(String.Empty);
 
             AssetManager.Instance.reportVersionAndDependencies();
-            Console.WriteLine("Version: v{0}", asset1.Version);
+
+            //Console.WriteLine("Version: v{0}", asset1.Version);
 
             Console.WriteLine(String.Empty);
+        }
 
-            // Use the new Logger directly. 
-            // 
+        /// <summary>
+        /// Tests 03 asset to asset and bridge.
+        /// </summary>
+        private static void Test_03_AssetToAssetAndBridge()
+        {
+            // Use the new Logger directly.
+            //
             asset3.log("LogByLogger: " + asset3.Class + ", " + asset3.Id);
 
-            // Test if asset1 can find the Logger (asset3) thru the AssetManager. 
-            // 
+            // Test if asset1 can find the Logger (asset3) thru the AssetManager.
+            //
             asset1.publicMethod("Hello World (console.log)");
 
             //! TODO Implement replacing method behavior.
             //
 
             // Replace the both Logger's log method by a native version supplied by the Game Engine.
-            // 
+            //
             AssetManager.Instance.Bridge = bridge1;
 
-            // Check the results for both Loggers are alike. 
-            // 
+            // Check the results for both Loggers are alike.
+            //
             asset1.publicMethod("Hello Different World (Game Engine Logging)");
 
-            // Replace the 1st Logger's log method by a native version supplied by the Game Engine. 
-            // 
-            asset3.Bridge = bridge2;
+            // Replace the 1st Logger's log method by a native version supplied by the Game Engine.
+            //
+            asset2.Bridge = bridge2;
 
-            // Check the results for both Loggers differ (one message goes to the console, the other shows as an alert). 
-            // 
+            // Check the results for both Loggers differ (one message goes to the console, the other shows as an alert).
+            //
             asset1.publicMethod("Hello Different World (Game Engine Logging)");
+        }
 
-            #region IDataStorage and IDataArchive
-
+        /// <summary>
+        /// Tests 04 data storage and archive.
+        /// </summary>
+        private static void Test_04_DataStorageAndArchive()
+        {
+            asset3.log("----[assetmanager.bridge]-----");
             asset2.doStore();   // Create Hello1.txt and Hello2.txt
-            asset2.doList();    // List
+            foreach (String fn in asset2.doList()) // List
+            {
+                asset3.log(String.Format("{0}={1}", fn, asset2.doLoad(fn)));
+            }
             asset2.doRemove();  // Remove Hello1.txt
-            asset2.doList();    // List
+
+            foreach (String fn in asset2.doList()) // List
+            {
+                asset3.log(String.Format("{0}={1}", fn, asset2.doLoad(fn)));
+            }
             asset2.doArchive(); // Move Hello2.txt
 
-            //! Reset/Remove Both Bridges
+            asset3.log("----[default]-----");
+
+            //! Reset/Remove Both Bridges.
             // 
-            asset3.Bridge = null;
+            asset2.Bridge = null;
 
             AssetManager.Instance.Bridge = null;
 
-            asset2.doList();
+            foreach (String fn in asset2.doList()) // List
+            {
+                asset3.log(String.Format("{0}={1}", fn, asset2.doLoad(fn)));
+            }
             asset2.doStore();
+
+            asset3.log("----[private.bridge]-----");
 
             asset2.Bridge = bridge2;
 
             asset2.doStore();
-            asset2.doList();
+
+            foreach (String fn in asset2.doList()) // List
+            {
+                asset3.log(String.Format("{0}={1}", fn, asset2.doLoad(fn)));
+            }
+
+            asset3.log("----[default]-----");
 
             asset2.Bridge = null;
 
-            asset2.doList();
+            foreach (String fn in asset2.doList()) // List
+            {
+                asset3.log(String.Format("{0}={1}", fn, asset2.doLoad(fn)));
+            }
+        }
 
-            #endregion IDataStorage and IDataArchive
-
-            #region EventSubscription
-
+        /// <summary>
+        /// Tests 05 event subscription.
+        /// </summary>
+        private static void Test_05_EventSubscription()
+        {
             //! Event Subscription.
-            // 
-            // Define an event, subscribe to it and fire the event. 
-            // 
+            //
+            // Define an event, subscribe to it and fire the event.
+            //
             pubsubz.define("EventSystem.Msg");
 
             //! Using a method.
-            // 
+            //
             {
                 String eventId = pubsubz.subscribe("EventSystem.Msg", MyEventHandler);
 
@@ -221,7 +322,7 @@ namespace asset_proof_of_concept_demo_CSharp
             }
 
             //! Using delegate.
-            // 
+            //
             {
                 pubsubz.TopicEvent te = (topic, args) =>
                 {
@@ -236,7 +337,7 @@ namespace asset_proof_of_concept_demo_CSharp
             }
 
             //! Using anonymous delegate.
-            // 
+            //
             {
                 String eventId = pubsubz.subscribe("EventSystem.Msg", (topic, args) =>
                 {
@@ -247,42 +348,48 @@ namespace asset_proof_of_concept_demo_CSharp
 
                 pubsubz.unsubscribe(eventId);
             }
+        }
 
-            #endregion EventSubscription
+        /// <summary>
+        /// Tests 06 sanity checks.
+        /// </summary>
+        private static void Test_06_SanityChecks()
+        {
+            //! Check if id and class can still be changed (shouldn't).
+            //
+            //asset4.Id = "XYY1Z";
+            //asset4.Class = "test";
+            //asset4.log("Asset4: " + asset4.Class + ", " + asset4.Id);
 
-            //! Check if id and class can still be changed (shouldn't). 
-            // 
-            //asset4.Id = "XYY1Z"; 
-            //asset4.Class = "test"; 
-            //asset4.log("Asset4: " + asset4.Class + ", " + asset4.Id); 
-
-            //! Test if we can re-register without creating new stuff in the register (i.e. get the existing unique id returned). 
-            // 
+            //! Test if we can re-register without creating new stuff in the register (i.e. get the existing unique id returned).
+            //
             Console.WriteLine("Trying to re-register: {0}", AssetManager.Instance.registerAssetInstance(asset4, asset4.Class));
+        }
 
-            #region DialogAsset
-
+        /// <summary>
+        /// Tests 07 dialogue asset.
+        /// </summary>
+        private static void Test_07_DialogueAsset()
+        {
             //! DialogAsset.
-            // 
+            //
             asset5.LoadScript("me", "script.txt");
 
-            // Interacting using ask/tell 
+            // Interacting using ask/tell
 
             asset5.interact("me", "player", "banana");
 
-            // Interacting using branches 
-            // 
+            // Interacting using branches
+            //
             asset5.interact("me", "player");
-            asset5.interact("me", "player", 2); //Answer id 2 
-
-            asset5.interact("me", "player");
-            asset5.interact("me", "player", 6); //Answer id 6 
+            asset5.interact("me", "player", 2); //Answer id 2
 
             asset5.interact("me", "player");
+            asset5.interact("me", "player", 6); //Answer id 6
 
-            #endregion DialogAsset
-
-            Console.ReadKey();
+            asset5.interact("me", "player");
         }
+
+        #endregion Methods
     }
 }

@@ -52,5 +52,32 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         #endregion Methods
+
+        #region Properties
+
+        public override String Version
+        {
+            get
+            {
+                return "1.2.3";
+            }
+        }
+
+        /// <summary>
+        /// Gets the maturity.
+        /// </summary>
+        ///
+        /// <value>
+        /// The maturity.
+        /// </value>
+        public override String Maturity
+        {
+            get
+            {
+                return "alpha";
+            }
+        }
+
+        #endregion Properies
     }
 }

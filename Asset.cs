@@ -64,6 +64,29 @@ namespace asset_proof_of_concept_demo_CSharp
         String fData = "Hello Storage World";
 
         /// <summary>
+        /// Executes the load operation.
+        /// </summary>
+        ///
+        /// <param name="fn"> The filename. </param>
+        ///
+        /// <returns>
+        /// A String.
+        /// </returns>
+        public String doLoad(String fn)
+        {
+            IDataStorage ds = getInterface<IDataStorage>();
+
+            if (ds != null)
+            {
+                return ds.Load(fn);
+            }
+            else
+            {
+                return FileStorage[fn];
+            }
+        }
+
+        /// <summary>
         /// Executes the store operation.
         /// </summary>
         public void doStore()
@@ -119,30 +142,83 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <summary>
         /// Executes the list operation.
         /// </summary>
-        public void doList()
+        ///
+        /// <returns>
+        /// A List&lt;String&gt;
+        /// </returns>
+        public List<String> doList()
         {
             IDataStorage ds = getInterface<IDataStorage>();
 
             if (ds != null)
             {
-                Console.WriteLine("----[bridge]-----");
-
-                foreach (String fn in ds.Files())
-                {
-                    Console.WriteLine("{0}={1}", fn, ds.Load(fn));
-                }
+                return ds.Files();
             }
             else
             {
-                Console.WriteLine("----[default]-----");
-
-                foreach (String fn in FileStorage.Keys)
-                {
-                    Console.WriteLine("{0}={1}", fn, FileStorage[fn]);
-                }
+                return FileStorage.Keys.ToList();
             }
         }
 
         #endregion Methods
+
+        #region Properties
+
+        //<?xml version="1.0" encoding="utf-8" ?>
+        //<version>
+        //  <id>asset</id>
+        //  <major>1</major>
+        //  <minor>2</minor>
+        //  <build>3</build>
+        //  <revision></revision>
+        //  <maturity>alpha</maturity>
+        //  <dependencies>
+        //    <depends minVersion="1.2.3">Logger</depends>
+        //  </dependencies>
+        //</version>
+
+        public override String Version
+        {
+            get
+            {
+                return "1.0.0";
+            }
+        }
+
+        /// <summary>
+        /// Gets the maturity.
+        /// </summary>
+        ///
+        /// <value>
+        /// The maturity.
+        /// </value>
+        public override String Maturity
+        {
+            get
+            {
+                return "alpha";
+            }
+        }
+
+        /// <summary>
+        /// Gets the dependencies.
+        /// </summary>
+        ///
+        /// <value>
+        /// The dependencies.
+        /// </value>
+        public override Dictionary<String, String> Dependencies
+        {
+            get
+            {
+                Dictionary<String, String> dependencies = new Dictionary<String, String>();
+
+                dependencies.Add(typeof(Logger).Name, String.Format("{0}", "1.2.3"));
+
+                return dependencies;
+            }
+        }
+
+        #endregion Propeties
     }
 }

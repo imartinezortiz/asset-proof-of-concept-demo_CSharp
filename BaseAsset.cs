@@ -42,7 +42,7 @@ namespace asset_proof_of_concept_demo_CSharp
             });
 
             //! List Embedded Resources.
-            //foreach (String name in Assembly.GetExecutingAssembly().GetManifestResourceNames())
+            //foreach (String name in Assembly.GetCallingAssembly().GetManifestResourceNames())
             //{
             //    Console.WriteLine("{0}", name);
             //}
@@ -100,17 +100,19 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The version.
         /// </value>
-        public String Version
+        public virtual String Version
         {
             get
             {
-                XDocument versionXml = VersionAndDependencies();
+                return String.Empty;
 
-                return String.Format("{0}.{1}.{2}.{3}",
-                    XmlTagValue(versionXml, "version/major"),
-                    XmlTagValue(versionXml, "version/minor"),
-                    XmlTagValue(versionXml, "version/build"),
-                    XmlTagValue(versionXml, "version/revision")).TrimEnd('.');
+                //XDocument versionXml = VersionAndDependencies();
+
+                //return String.Format("{0}.{1}.{2}.{3}",
+                //    XmlTagValue(versionXml, "version/major"),
+                //    XmlTagValue(versionXml, "version/minor"),
+                //    XmlTagValue(versionXml, "version/build"),
+                //    XmlTagValue(versionXml, "version/revision")).TrimEnd('.');
             }
         }
 
@@ -121,11 +123,12 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The maturity.
         /// </value>
-        public String Maturity
+        public virtual String Maturity
         {
             get
             {
-                return XmlTagValue(VersionAndDependencies(), "version/maturity");
+                return String.Empty;
+                //return XmlTagValue(VersionAndDependencies(), "version/maturity");
             }
         }
 
@@ -136,21 +139,69 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The dependencies.
         /// </value>
-        public Dictionary<String, String> Dependencies
+        public virtual Dictionary<String, String> Dependencies
         {
             get
             {
-                Dictionary<String, String> dependencies = new Dictionary<String, String>();
+                return new Dictionary<String, String>();
+            }
+        }
 
-                foreach (XElement dependency in VersionAndDependencies().XPathSelectElements("version/dependencies/depends"))
+        /// <summary>
+        /// Gets the version and dependencies.
+        /// </summary>
+        ///
+        /// <value>
+        /// The version and dependencies.
+        /// </value>
+        public String VersionAndDependencies
+        {
+            get
+            {
+                //<?xml version="1.0" encoding="utf-8" ?>
+                //<version>
+                //  <id>asset</id>
+                //  <major>1</major>
+                //  <minor>2</minor>
+                //  <build>3</build>
+                //  <revision></revision>
+                //  <maturity>alpha</maturity>
+                //  <dependencies>
+                //    <depends minVersion="1.2.3">Logger</depends>
+                //  </dependencies>
+                //</version>
+                Version version = new Version(this.Version);
+
+                XDocument doc = new XDocument();
+                XElement v = new XElement("version",
+                    new XElement("id", Class),
+                    new XElement("major", version.Major),
+                    new XElement("minor", version.Minor),
+                    new XElement("build", version.Build),
+                    new XElement("revision", version.Revision),
+                    new XElement("maturity", Maturity)
+                    );
+
+                foreach (KeyValuePair<String, String> kvp in Dependencies)
                 {
-                    String minv = dependency.Attribute("minVersion") != null ? dependency.Attribute("minVersion").Value : "0.0";
-                    String maxv = dependency.Attribute("maxVersion") != null ? dependency.Attribute("maxVersion").Value : "*";
+                    String[] minmax = kvp.Value.Split('-');
 
-                    dependencies.Add(dependency.Value, String.Format("{0}-{1},", minv, maxv));
+                    String minv = minmax.Length > 0 ? minmax[0] : String.Empty;
+                    String maxv = minmax.Length > 1 ? minmax[1] : minv;
+
+                    v.Add(new XElement("dependencies",
+                    new XElement("dependency",
+                        new XAttribute("minVersion", minv),
+                        new XAttribute("maxVersion", maxv),
+                        new XText(kvp.Key)
+                        )
+                    )
+                );
                 }
 
-                return dependencies;
+                doc.Add(v);
+
+                return doc.ToString(SaveOptions.None);
             }
         }
 
@@ -182,55 +233,24 @@ namespace asset_proof_of_concept_demo_CSharp
             return default(T);
         }
 
-        /// <summary>
-        /// XML tag value.
-        /// </summary>
-        ///
-        /// <param name="doc">   The document. </param>
-        /// <param name="xpath"> The xpath. </param>
-        ///
-        /// <returns>
-        /// A String.
-        /// </returns>
-        private String XmlTagValue(XDocument doc, String xpath)
-        {
-            if (doc.XPathSelectElement(xpath) != null)
-            {
-                return doc.XPathSelectElement(xpath).Value;
-            }
-            return String.Empty;
-        }
-
-        /// <summary>
-        /// Version and dependencies.
-        /// </summary>
-        ///
-        /// <returns>
-        /// An XDocument.
-        /// </returns>
-        internal XDocument VersionAndDependencies()
-        {
-            return XDocument.Parse(
-                GetEmbeddedResource(GetType().Namespace, String.Format(String.Format("{0}.VersionAndDependencies.xml", GetType().Name))));
-        }
-
-        /// <summary>
-        /// Gets embedded resource.
-        /// </summary>
-        ///
-        /// <param name="ns">  The namespace. </param>
-        /// <param name="res"> The resource name. </param>
-        ///
-        /// <returns>
-        /// The embedded resource.
-        /// </returns>
-        protected String GetEmbeddedResource(String ns, String res)
-        {
-            using (StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(String.Format("{0}.{1}", ns, res))))
-            {
-                return reader.ReadToEnd();
-            }
-        }
+        ///// <summary>
+        ///// XML tag value.
+        ///// </summary>
+        /////
+        ///// <param name="doc">   The document. </param>
+        ///// <param name="xpath"> The xpath. </param>
+        /////
+        ///// <returns>
+        ///// A String.
+        ///// </returns>
+        //private String XmlTagValue(XDocument doc, String xpath)
+        //{
+        //    if (doc.XPathSelectElement(xpath) != null)
+        //    {
+        //        return doc.XPathSelectElement(xpath).Value;
+        //    }
+        //    return String.Empty;
+        //}
 
         #endregion Methods
     }

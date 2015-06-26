@@ -12,7 +12,7 @@ namespace asset_proof_of_concept_demo_CSharp
     /// <summary>
     /// Interface for asset.
     /// </summary>
-    public interface IAsset
+    public interface IAsset : IVersion
     {
         #region Properties
 
@@ -41,37 +41,13 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         /// <summary>
-        /// Gets the version.
+        /// Gets the version and dependencies.
         /// </summary>
         ///
         /// <value>
-        /// The version.
+        /// The version and dependencies.
         /// </value>
-        String Version
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Gets the maturity.
-        /// </summary>
-        ///
-        /// <value>
-        /// The maturity.
-        /// </value>
-        String Maturity
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Gets the dependencies.
-        /// </summary>
-        ///
-        /// <value>
-        /// The dependencies (A Dictionary of class=version pairs).
-        /// </value>
-        Dictionary<String, String> Dependencies
+        String VersionAndDependencies
         {
             get;
         }
