@@ -294,6 +294,13 @@ namespace asset_proof_of_concept_demo_CSharp
 
         #region Properties
 
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        ///
+        /// <value>
+        /// The version.
+        /// </value>
         public override String Version
         {
             get

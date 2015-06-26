@@ -164,19 +164,9 @@ namespace asset_proof_of_concept_demo_CSharp
 
         #region Properties
 
-        //<?xml version="1.0" encoding="utf-8" ?>
-        //<version>
-        //  <id>asset</id>
-        //  <major>1</major>
-        //  <minor>2</minor>
-        //  <build>3</build>
-        //  <revision></revision>
-        //  <maturity>alpha</maturity>
-        //  <dependencies>
-        //    <depends minVersion="1.2.3">Logger</depends>
-        //  </dependencies>
-        //</version>
-
+        /// <value>
+        /// The version.
+        /// </value>
         public override String Version
         {
             get

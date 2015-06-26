@@ -100,7 +100,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// Main entry-point for this application.
         /// </summary>
         ///
-        /// <param name="args"> A variable-length parameters list containing arguments. </param>
+        /// <param name="cargs"> A variable-length parameters list containing arguments. </param>
         static void Main(string[] cargs)
         {
             Test_01_Setup();

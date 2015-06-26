@@ -13,6 +13,9 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.Xml.Linq;
     using System.Xml.XPath;
 
+    /// <summary>
+    /// A base asset.
+    /// </summary>
     public class BaseAsset : IAsset
     {
         #region Fields

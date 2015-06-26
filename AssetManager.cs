@@ -12,6 +12,9 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.Text;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// Manager for assets.
+    /// </summary>
     public class AssetManager
     {
         #region Fields
