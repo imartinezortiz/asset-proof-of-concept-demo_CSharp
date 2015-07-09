@@ -208,7 +208,7 @@ namespace asset_proof_of_concept_demo_CSharp
 
             AssetManager.Instance.reportVersionAndDependencies();
 
-            //Console.WriteLine("Version: v{0}", asset1.Version);
+            Console.WriteLine("Version: v{0}", asset5.VersionAndDependencies);
 
             Console.WriteLine(String.Empty);
         }

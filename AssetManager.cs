@@ -1,4 +1,4 @@
-﻿// <copyright file="AssetManager.cs" company="RAGE">
+// <copyright file="AssetManager.cs" company="RAGE">
 // Copyright (c) 2015 RAGE. All rights reserved.
 // </copyright>
 // <author>Veg</author>
@@ -181,7 +181,7 @@ namespace asset_proof_of_concept_demo_CSharp
 
             foreach (KeyValuePair<String, IAsset> asset in assets)
             {
-                Console.Write(String.Format("{0} v{1}", asset.Value.Class, asset.Value.Version).PadRight(40));
+                Console.Write(String.Format("{0} v{1}", asset.Value.Class, asset.Value.Version).PadRight(col1w));
 
                 Int32 cnt = 0;
                 foreach (KeyValuePair<String, String> dependency in asset.Value.Dependencies)
@@ -198,12 +198,16 @@ namespace asset_proof_of_concept_demo_CSharp
                     //
                     String[] vrange = dependency.Value.Split('-');
 
-                    Version low = new Version(vrange[0]);
+                    Version low = null;
 
-                    Version hi;
+                    Version hi = null;
 
                     switch (vrange.Length)
                     {
+                    	case 1:
+   			    low = new Version(vrange[0]);
+			    hi = low;
+			    break;
                         case 2:
                             if (vrange[1].Equals("*"))
                             {
@@ -216,23 +220,27 @@ namespace asset_proof_of_concept_demo_CSharp
                             break;
 
                         default:
-                            hi = low;
                             break;
                     }
 
                     Boolean found = false;
 
-                    foreach (IAsset dep in findAssetsByClass(dependency.Key))
-                    {
+                    if (low!=null) {
+                      foreach (IAsset dep in findAssetsByClass(dependency.Key))
+                      {
                         Version vdep = new Version(dep.Version);
                         if (low <= vdep && vdep <= hi)
                         {
                             found = true;
+                            break;
                         }
-                    }
+                      }
 
-                    Console.WriteLine(String.Format("|{0} v{1} [{2}]", dependency.Key, dependency.Value, found ? "resolved" : "missing"));
-
+                      Console.WriteLine(String.Format("|{0} v{1} [{2}]", dependency.Key, dependency.Value, found ? "resolved" : "missing"));
+                    } else {
+		      Console.WriteLine("error");
+		    }
+					
                     if (cnt != 0)
                     {
                         Console.Write("".PadRight(col1w));
