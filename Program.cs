@@ -117,6 +117,8 @@ namespace asset_proof_of_concept_demo_CSharp
 
             Test_07_DialogueAsset();
 
+            Test_08_Settings();
+
             Console.ReadKey();
         }
 
@@ -208,7 +210,7 @@ namespace asset_proof_of_concept_demo_CSharp
 
             AssetManager.Instance.reportVersionAndDependencies();
 
-            Console.WriteLine("Version: v{0}", asset5.VersionAndDependencies);
+            Console.WriteLine("Version: v{0}", asset1.Version);
 
             Console.WriteLine(String.Empty);
         }
@@ -373,7 +375,7 @@ namespace asset_proof_of_concept_demo_CSharp
         {
             //! DialogAsset.
             //
-            asset5.LoadScript("me", "script.txt");
+            asset5.LoadScript("me", typeof(DialogueAsset).Namespace, "script.txt");
 
             // Interacting using ask/tell
 
@@ -390,6 +392,42 @@ namespace asset_proof_of_concept_demo_CSharp
             asset5.interact("me", "player");
         }
 
+        private static void Test_08_Settings()
+        {
+            //script.dialogueText.text = asset1.DefaultSettings.Count.ToString();//["NewKey0"].;
+
+            //! Log Default Settings
+            Debug.Print(asset1.SettingsToXml());
+
+            //! Log Default Settings
+            asset2.Bridge = bridge1;
+            Debug.Print(asset2.SettingsToXml());
+
+            //! Save App Default Settings if not present (and Settings is not null).
+            asset2.SaveDefaultSettings();
+
+            //! Load App Default Settings if present (and Settings is not null).
+            asset2.LoadDefaultSettings();
+            Debug.Print(asset2.SettingsToXml());
+
+            //! Try Saving an Asset with No Settings (null)
+            if (asset3.hasSettings)
+            {
+                asset3.SaveDefaultSettings();
+
+                Debug.Print(asset3.SettingsToXml());
+            }
+
+            //! Save Runtime Settings
+            asset2.SaveSettings("runtime-settings.xml");
+
+            //! Load Runtime Settings.
+            asset1.Bridge = bridge1;
+            asset1.LoadSettings("runtime-settings.xml");
+
+            Debug.Print(asset1.SettingsToXml());
+        }
+        
         #endregion Methods
     }
 }
