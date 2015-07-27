@@ -54,11 +54,11 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RageAssetManager\RageAssetManager.csproj">
+    <ProjectReference Include="RageAssetManager\RageAssetManager.csproj">
       <Project>{da8e9056-2e52-4029-81eb-a2d167614c47}</Project>
       <Name>RageAssetManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RageAssets\RageAssets.csproj">
+    <ProjectReference Include="RageAssets\RageAssets.csproj">
       <Project>{4d1f98c7-6827-4f99-b676-f5c9af632609}</Project>
       <Name>RageAssets</Name>
     </ProjectReference>
