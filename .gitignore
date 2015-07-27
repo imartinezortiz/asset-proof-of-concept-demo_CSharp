@@ -58,7 +58,11 @@ obj/*
 *.booproj
 *.exe
 *.meta
-*/packages/*
+/packages/*
+asset-proof-of-concept-demo_CSharp/obj/*
+asset-proof-of-concept-demo_CSharp/bin/*
+RageAssetManager/obj/*
+RageAssets/obj/*
 
 # Demo code output
 */Archive/*
