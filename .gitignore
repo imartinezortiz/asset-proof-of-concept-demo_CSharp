@@ -59,10 +59,8 @@ obj/*
 *.exe
 *.meta
 /packages/*
-asset-proof-of-concept-demo_CSharp/obj/*
-asset-proof-of-concept-demo_CSharp/bin/*
-RageAssetManager/obj/*
-RageAssets/obj/*
+*/obj/*
+*/bin/*
 
 # Demo code output
 */Archive/*
@@ -74,3 +72,4 @@ RageAssets/obj/*
 *.txt
 *.pdb
 *.config
+*.sln
