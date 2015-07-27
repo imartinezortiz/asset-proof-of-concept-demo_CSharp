@@ -11,6 +11,9 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.IO;
     using System.Linq;
 
+    /// <summary>
+    /// A dialogue asset.
+    /// </summary>
     public class DialogueAsset : BaseAsset
     {
         #region Fields
@@ -47,6 +50,17 @@ namespace asset_proof_of_concept_demo_CSharp
 
         #region Methods
 
+        /// <summary>
+        /// Interacts.
+        /// </summary>
+        ///
+        /// <param name="actor">    The actor. </param>
+        /// <param name="player">   The player. </param>
+        /// <param name="response"> The response. </param>
+        ///
+        /// <returns>
+        /// A Dialogue.
+        /// </returns>
         public Dialogue interact(String actor, String player, Int32 response)
         {
             return interact(actor, player, response.ToString());
@@ -56,10 +70,29 @@ namespace asset_proof_of_concept_demo_CSharp
         /// Interacts.
         /// </summary>
         ///
+        /// <param name="actor">  The actor. </param>
+        /// <param name="player"> The player. </param>
+        ///
+        /// <returns>
+        /// A Dialogue.
+        /// </returns>
+        public Dialogue interact(String actor, String player)
+        {
+            return interact(actor, player, null);
+        }
+
+        /// <summary>
+        /// Interacts.
+        /// </summary>
+        ///
         /// <param name="actor">    The actor. </param>
         /// <param name="player">   The player. </param>
         /// <param name="response"> The response. </param>
-        public Dialogue interact(String actor, String player, String response = null)
+        ///
+        /// <returns>
+        /// A Dialogue.
+        /// </returns>
+        public Dialogue interact(String actor, String player, String response)
         {
             Int32 state = FindStateIndex(actor, player);
             //Int32 state = index != -1 ? States[index].state : 0;
@@ -303,59 +336,6 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         #endregion Methods
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the version.
-        /// </summary>
-        ///
-        /// <value>
-        /// The version.
-        /// </value>
-        public override String Version
-        {
-            get
-            {
-                return "1.2.3.25";
-            }
-        }
-
-        /// <summary>
-        /// Gets the maturity.
-        /// </summary>
-        ///
-        /// <value>
-        /// The maturity.
-        /// </value>
-        public override String Maturity
-        {
-            get
-            {
-                return "beta";
-            }
-        }
-
-        /// <summary>
-        /// Gets the dependencies.
-        /// </summary>
-        ///
-        /// <value>
-        /// The dependencies.
-        /// </value>
-        public override Dictionary<String, String> Dependencies
-        {
-            get
-            {
-                Dictionary<String, String> dependencies = new Dictionary<String, String>();
-
-                dependencies.Add(typeof(Logger).Name, String.Format("{0}-{1}", "1.3.3", "1.4.5"));
-
-                return dependencies;
-            }
-        }
-
-        #endregion Properties
 
         #region Nested Types
 

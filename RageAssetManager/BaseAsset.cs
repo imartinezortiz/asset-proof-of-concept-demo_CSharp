@@ -9,7 +9,6 @@ namespace asset_proof_of_concept_demo_CSharp
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
     using System.Text;
     using System.Xml.Linq;
     using System.Xml.Serialization;
@@ -92,11 +91,21 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The dependencies.
         /// </value>
-        public virtual Dictionary<String, String> Dependencies
+        public Dictionary<String, String> Dependencies
         {
             get
             {
-                return new Dictionary<String, String>();
+                Dictionary<String, String> dependencies = new Dictionary<String, String>();
+
+                foreach (XElement dependency in VersionAndDependencies().XPathSelectElements("version/dependencies/depends"))
+                {
+                    String minv = dependency.Attribute("minVersion") != null ? dependency.Attribute("minVersion").Value : "0.0";
+                    String maxv = dependency.Attribute("maxVersion") != null ? dependency.Attribute("maxVersion").Value : "*";
+
+                    dependencies.Add(dependency.Value, String.Format("{0}-{1}", minv, maxv));
+                }
+
+                return dependencies;
             }
         }
 
@@ -135,12 +144,11 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The maturity.
         /// </value>
-        public virtual String Maturity
+        public String Maturity
         {
             get
             {
-                return String.Empty;
-                //return XmlTagValue(VersionAndDependencies(), "version/maturity");
+                return XmlTagValue(VersionAndDependencies(), "version/maturity");
             }
         }
 
@@ -164,19 +172,17 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The version.
         /// </value>
-        public virtual String Version
+        public String Version
         {
             get
             {
-                return String.Empty;
+                XDocument versionXml = VersionAndDependencies();
 
-                //XDocument versionXml = VersionAndDependencies();
-
-                //return String.Format("{0}.{1}.{2}.{3}",
-                //    XmlTagValue(versionXml, "version/major"),
-                //    XmlTagValue(versionXml, "version/minor"),
-                //    XmlTagValue(versionXml, "version/build"),
-                //    XmlTagValue(versionXml, "version/revision")).TrimEnd('.');
+                return String.Format("{0}.{1}.{2}.{3}",
+                    XmlTagValue(versionXml, "version/major"),
+                    XmlTagValue(versionXml, "version/minor"),
+                    XmlTagValue(versionXml, "version/build"),
+                    XmlTagValue(versionXml, "version/revision")).TrimEnd('.');
             }
         }
 
@@ -407,7 +413,6 @@ namespace asset_proof_of_concept_demo_CSharp
             else if (AssetManager.Instance.Bridge != null && AssetManager.Instance.Bridge is T)
             {
                 return (T)(AssetManager.Instance.Bridge);
-
             }
 
             return default(T);

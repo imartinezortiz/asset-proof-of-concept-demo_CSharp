@@ -6,7 +6,6 @@
 namespace asset_proof_of_concept_demo_CSharp
 {
     using System;
-    using System.Diagnostics;
 
     /// <summary>
     /// A logger.
@@ -36,55 +35,20 @@ namespace asset_proof_of_concept_demo_CSharp
         public void log(String msg)
         {
             //! See what bridge code to call, Asset, Asset Manager or just expose Default behavior (if any).
-
-            if (Bridge != null && Bridge is ILogger)
+            // 
+            ILogger logger = getInterface<ILogger>();
+            if (logger != null)
             {
-                (Bridge as ILogger).doLog(msg);
-            }
-            else if (AssetManager.Instance.Bridge != null && AssetManager.Instance.Bridge is ILogger)
-            {
-                (AssetManager.Instance.Bridge as ILogger).doLog(msg);
+                // Use a supplied bridge.
+                logger.doLog(msg);
             }
             else
             {
+                // Default behavior.
                 Console.WriteLine(msg);
             }
         }
 
         #endregion Methods
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the version.
-        /// </summary>
-        ///
-        /// <value>
-        /// The version.
-        /// </value>
-        public override String Version
-        {
-            get
-            {
-                return "1.2.3";
-            }
-        }
-
-        /// <summary>
-        /// Gets the maturity.
-        /// </summary>
-        ///
-        /// <value>
-        /// The maturity.
-        /// </value>
-        public override String Maturity
-        {
-            get
-            {
-                return "alpha";
-            }
-        }
-
-        #endregion Properies
     }
 }
