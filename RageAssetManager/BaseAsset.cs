@@ -219,7 +219,7 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         /// <summary>
-        /// Saves Settings object as Run-time Settings.
+        /// Loads Settings object as Run-time Settings.
         /// </summary>
         ///
         /// <remarks>
