@@ -60,9 +60,9 @@
         /// This method can only be used during editing the game (so NOT at run-time).
         /// </remarks>
         ///
-        /// <param name="Class"> The class. </param>
-        /// <param name="Id">    The identifier. </param>
-        /// <param name="fileData">   The XML. </param>
+        /// <param name="Class">    The class. </param>
+        /// <param name="Id">       The identifier. </param>
+        /// <param name="fileData"> The File Data. </param>
         void SaveDefaultSettings(String Class, String Id, String fileData);
 
         #endregion Methods
