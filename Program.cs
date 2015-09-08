@@ -13,6 +13,8 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.Reflection;
     using System.Xml.Linq;
     using System.Xml.XPath;
+    using AssetManagerPackage;
+    using AssetPackage;
 
     /// <summary>
     /// A program.
@@ -208,7 +210,7 @@ namespace asset_proof_of_concept_demo_CSharp
             }
             Console.WriteLine(String.Empty);
 
-            AssetManager.Instance.reportVersionAndDependencies();
+            Console.WriteLine(AssetManager.Instance.VersionAndDependenciesReport);
 
             Console.WriteLine("Version: v{0}", asset1.Version);
 
@@ -404,7 +406,7 @@ namespace asset_proof_of_concept_demo_CSharp
             Debug.Print(asset2.SettingsToXml());
 
             //! Save App Default Settings if not present (and Settings is not null).
-            asset2.SaveDefaultSettings();
+            asset2.SaveDefaultSettings(false);
 
             //! Load App Default Settings if present (and Settings is not null).
             asset2.LoadDefaultSettings();
@@ -413,7 +415,7 @@ namespace asset_proof_of_concept_demo_CSharp
             //! Try Saving an Asset with No Settings (null)
             if (asset3.hasSettings)
             {
-                asset3.SaveDefaultSettings();
+                asset3.SaveDefaultSettings(false);
 
                 Debug.Print(asset3.SettingsToXml());
             }
@@ -427,7 +429,7 @@ namespace asset_proof_of_concept_demo_CSharp
 
             Debug.Print(asset1.SettingsToXml());
         }
-        
+
         #endregion Methods
     }
 }

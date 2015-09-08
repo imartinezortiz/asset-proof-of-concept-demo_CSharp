@@ -4,7 +4,7 @@
 // <author>Veg</author>
 // <date>13-4-2015</date>
 // <summary>Implements the base asset class</summary>
-namespace asset_proof_of_concept_demo_CSharp
+namespace AssetPackage
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +13,8 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.Xml.Linq;
     using System.Xml.Serialization;
     using System.Xml.XPath;
+
+    using AssetManagerPackage;
 
     /// <summary>
     /// A base asset.
@@ -24,6 +26,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <summary>
         /// The test subscription.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         private String testSubscription;
 
         #endregion Fields
@@ -39,17 +42,28 @@ namespace asset_proof_of_concept_demo_CSharp
 
             //! NOTE Unlike the JavaScript and Typescript versions (using a setTimeout) registration will not get triggered during publish in the AssetManager constructor.
             //
-            testSubscription = pubsubz.subscribe("EventSystem.Init", (topics, data) =>
-            {
-                //This code fails in TypeScript (coded there as 'this.Id') as this points to the method and not the Asset.
-                Console.WriteLine("[{0}].{1}: {2}", this.Id, topics, data);
-            });
+            //testSubscription = pubsubz.subscribe("EventSystem.Init", (topics, data) =>
+            //{
+            //This code fails in TypeScript (coded there as 'this.Id') as this points to the method and not the Asset.
+            //Console.WriteLine("[{0}].{1}: {2}", this.Id, topics, data);
+            //});
 
             //! List Embedded Resources.
             //foreach (String name in Assembly.GetCallingAssembly().GetManifestResourceNames())
             //{
             //    Console.WriteLine("{0}", name);
             //}
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the AssetPackage.BaseAsset class.
+        /// </summary>
+        ///
+        /// <param name="bridge"> The bridge. </param>
+        public BaseAsset(IBridge bridge)
+            : this()
+        {
+            this.Bridge = bridge;
         }
 
         #endregion Constructors
@@ -63,7 +77,7 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <value>
         /// The bridge.
         /// </value>
-        public object Bridge
+        public IBridge Bridge
         {
             get;
             set;
@@ -235,7 +249,7 @@ namespace asset_proof_of_concept_demo_CSharp
         {
             IDataStorage ds = getInterface<IDataStorage>();
 
-            if (ds != null && hasSettings)
+            if (ds != null && hasSettings && ds.Exists(filename))
             {
                 String xml = ds.Load(filename);
 
@@ -259,11 +273,11 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <returns>
         /// true if it succeeds, false if it fails.
         /// </returns>
-        public Boolean SaveDefaultSettings()
+        public Boolean SaveDefaultSettings(bool force)
         {
             IDefaultSettings ds = getInterface<IDefaultSettings>();
 
-            if (ds != null && hasSettings && !ds.HasDefaultSettings(Class, Id))
+            if (ds != null && hasSettings && (force || !ds.HasDefaultSettings(Class, Id)))
             {
                 ds.SaveDefaultSettings(Class, Id, SettingsToXml());
 

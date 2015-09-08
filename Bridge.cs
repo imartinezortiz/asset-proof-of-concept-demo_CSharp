@@ -3,7 +3,7 @@
 // <author>Veg</author>
 // <date>13-4-2015</date>
 // <summary>Implements a Bridge with 3 interfaces</summary>
-namespace asset_proof_of_concept_demo_CSharp
+namespace AssetPackage
 {
     using System;
     using System.Collections.Generic;
@@ -11,10 +11,12 @@ namespace asset_proof_of_concept_demo_CSharp
     using System.Linq;
     using System.Reflection;
 
+    using asset_proof_of_concept_demo_CSharp;
+
     /// <summary>
     /// A bridge.
     /// </summary>
-    class Bridge : ILogger, IDataStorage, IDataArchive
+    class Bridge : IBridge, ILogger, IDataStorage, IDataArchive
     {
         const String StorageDir = @".\DataStorage";
         const String ArchiveDir = @".\Archive";
@@ -195,48 +197,5 @@ namespace asset_proof_of_concept_demo_CSharp
         }
 
         #endregion
-
-        //#region IVersionAndDependencies
-
-        // This code is not elegant (embedded resources are not emitted in Unity so we would need the bridge to load dependencies if stored as xml.
-
-        ///// <summary>
-        ///// Version and dependencies XML.
-        ///// </summary>
-        /////
-        ///// <returns>
-        ///// A String.
-        ///// </returns>
-        //public String VersionAndDependenciesXml(Type Class)
-        //{
-        //    #region Unity3D
-
-        //    //Object xml = Resources.Load(String.Format("{0}.VersionAndDependencies", Class.Name));
-        //    //if (xml!=null && xml is TextAsset) {
-        //    //	return (xml as TextAsset).text;
-        //    //}
-
-        //    #endregion
-
-        //    #region .NET
-
-        //    Assembly asm = Assembly.GetExecutingAssembly();
-
-        //    String rn = String.Format("{0}.{1}.VersionAndDependencies.xml", Class.Namespace, Class.Name);
-
-        //    if (asm != null && asm.GetManifestResourceNames().Contains(rn))
-        //    {
-        //        using (StreamReader reader = new StreamReader(asm.GetManifestResourceStream(rn)))
-        //        {
-        //            return reader.ReadToEnd();
-        //        }
-        //    }
-
-        //    #endregion
-
-        //    return String.Empty;
-        //}
-
-        //#endregion
     }
 }
