@@ -349,7 +349,10 @@ namespace AssetPackage
             using (StringWriterUtf8 textWriter = new StringWriterUtf8())
             {
                 //! Use DataContractSerializer or DataContractJsonSerializer?
-                //
+                // See https://msdn.microsoft.com/en-us/library/bb412170(v=vs.100).aspx
+                // See https://msdn.microsoft.com/en-us/library/bb924435(v=vs.110).aspx
+                // See https://msdn.microsoft.com/en-us/library/aa347875(v=vs.110).aspx
+                // 
                 ser.Serialize(textWriter, Settings);
 
                 textWriter.Flush();
