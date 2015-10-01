@@ -18,8 +18,8 @@ namespace AssetPackage
     /// </summary>
     class Bridge : IBridge, ILogger, IDataStorage, IDataArchive
     {
-        const String StorageDir = @".\DataStorage";
-        const String ArchiveDir = @".\Archive";
+        readonly String StorageDir = String.Format(@".{0}DataStorage", Path.DirectorySeparatorChar);
+        readonly String ArchiveDir = String.Format(@".{0}Archive", Path.DirectorySeparatorChar);
 
         /// <summary>
         /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.Bridge class.
@@ -107,12 +107,12 @@ namespace AssetPackage
         public List<String> Files()
         {
             return Directory.GetFiles(StorageDir).ToList().ConvertAll(
-    new Converter<String, String>(p => p.Replace(StorageDir + @"\", ""))).ToList();
+    new Converter<String, String>(p => p.Replace(StorageDir + Path.DirectorySeparatorChar, ""))).ToList();
 
             //! EnumerateFiles not supported in Unity3D.
             // 
             //return Directory.EnumerateFiles(StorageDir).ToList().ConvertAll(
-            //    new Converter<String, String>(p => p.Replace(StorageDir + @"\", ""))).ToList();
+            //    new Converter<String, String>(p => p.Replace(StorageDir +  Path.DirectorySeparatorChar, ""))).ToList();
         }
 
         /// <summary>

@@ -277,6 +277,18 @@ namespace AssetManagerPackage
         }
 
         /// <summary>
+        /// Clears the registration.
+        /// </summary>
+        /// <remarks>Used for cleaning up in test suites (as static readonly _instance member cannot be destroyed).</remarks>
+        [System.Diagnostics.Conditional("DEBUG")]
+        public void ClearRegistration()
+        {
+            idGenerator = 0;
+
+            assets.Clear();
+        }
+
+        /// <summary>
         /// Initialises the event system.
         /// </summary>
         private void initEventSystem()
@@ -289,5 +301,6 @@ namespace AssetManagerPackage
         }
 
         #endregion Methods
+
     }
 }

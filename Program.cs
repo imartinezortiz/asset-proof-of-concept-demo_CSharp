@@ -9,6 +9,7 @@ namespace asset_proof_of_concept_demo_CSharp
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Xml.Linq;
@@ -105,6 +106,8 @@ namespace asset_proof_of_concept_demo_CSharp
         /// <param name="cargs"> A variable-length parameters list containing arguments. </param>
         static void Main(string[] cargs)
         {
+            Console.WriteLine("DirectorySeparatorChar:" + Path.DirectorySeparatorChar);
+
             Test_01_Setup();
 
             Test_02_VersionAndDependenciesReport();
