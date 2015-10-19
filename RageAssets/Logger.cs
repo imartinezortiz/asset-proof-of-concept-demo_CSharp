@@ -3,10 +3,9 @@
 // <author>Veg</author>
 // <date>13-4-2015</date>
 // <summary>Implements the logger class</summary>
-namespace asset_proof_of_concept_demo_CSharp
+namespace AssetPackage
 {
     using System;
-    using AssetPackage;
 
     /// <summary>
     /// A logger.

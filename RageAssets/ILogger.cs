@@ -3,10 +3,10 @@
 // <author>Veg</author>
 // <date>13-4-2015</date>
 // <summary>defines the logger interface</summary>
-namespace asset_proof_of_concept_demo_CSharp
+namespace AssetPackage
 {
     using System;
-    
+
     /// <summary>
     /// Interface for logger.
     /// </summary>

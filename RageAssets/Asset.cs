@@ -4,7 +4,7 @@
 // <author>Veg</author>
 // <date>10-4-2015</date>
 // <summary>Implements the asset class</summary>
-namespace asset_proof_of_concept_demo_CSharp
+namespace AssetPackage
 {
     using System;
     using System.Collections.Generic;

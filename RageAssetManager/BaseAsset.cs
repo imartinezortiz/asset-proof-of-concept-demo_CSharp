@@ -21,16 +21,6 @@ namespace AssetPackage
     /// </summary>
     public class BaseAsset : IAsset
     {
-        #region Fields
-
-        /// <summary>
-        /// The test subscription.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private String testSubscription;
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -352,7 +342,7 @@ namespace AssetPackage
                 // See https://msdn.microsoft.com/en-us/library/bb412170(v=vs.100).aspx
                 // See https://msdn.microsoft.com/en-us/library/bb924435(v=vs.110).aspx
                 // See https://msdn.microsoft.com/en-us/library/aa347875(v=vs.110).aspx
-                // 
+                //
                 ser.Serialize(textWriter, Settings);
 
                 textWriter.Flush();
