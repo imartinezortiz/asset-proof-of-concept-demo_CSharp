@@ -42,9 +42,12 @@
         /// <param name="obj"> The object. </param>
         public static void UpdateDefaultValues(Object obj)
         {
+            // GetProperties not PCL
+            // BindingFlags not PCL
+            // foreach (PropertyInfo pi in obj.GetType().GetRuntimeProperties(/*BindingFlags.Instance | BindingFlags.Public*/))
             foreach (PropertyInfo pi in obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
-            {
-                Boolean foundandset = false;
+                {
+                    Boolean foundandset = false;
 
                 if (pi.CanWrite)
                 {
@@ -69,7 +72,7 @@
                                 val = String.Format("{0}", val);
                             }
 
-                            Debug.Print("Updating {0}.{1} to {2}", obj.GetType().Name, pi.Name, val);
+                            Debug.WriteLine("Updating {0}.{1} to {2}", obj.GetType().Name, pi.Name, val);
 
                             pi.SetValue(obj, ((DefaultValueAttribute)att).Value, new object[] { });
 
@@ -84,7 +87,7 @@
                         continue;
                     }
 
-                    Debug.Print("Error Updating Default Value of {0}.{1}", obj.GetType().Name, pi.Name);
+                    Debug.WriteLine("Error Updating Default Value of {0}.{1}", obj.GetType().Name, pi.Name);
                 }
             }
         }

@@ -6,8 +6,20 @@
 // <summary>Implements the asset manager class</summary>
 namespace AssetManagerPackage
 {
+#warning Platform Notes (Resources).
+    // See http://developer.xamarin.com/guides/android/application_fundamentals/resources_in_android/part_6_-_using_android_assets/ 
+    // See https://github.com/xamarin/mobile-samples/blob/master/EmbeddedResources/EmbeddedResources.Droid/MainActivity.cs
+    // Xamarin also seems to contain a class called AssetManager.
+    // Xamarin.Droid refuses to load embedded resources outside the 'assets' directory.
+    // 
+    // Fast Deployment on Android causes problems with resources.
+    // 
+    // See http://developer.xamarin.com/guides/cross-platform/xamarin-forms/localization/
+    // ResX files seem to be supported.
+
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -160,11 +172,11 @@ namespace AssetManagerPackage
 
             String Id = String.Format("{0}_{1}", claz, idGenerator++);
 
-            Console.WriteLine("Registering Asset {0}/{1} as {2}", asset.GetType().Name, claz, Id);
+            Debug.WriteLine("Registering Asset {0}/{1} as {2}", asset.GetType().Name, claz, Id);
 
             assets.Add(Id, asset);
 
-            Console.WriteLine("Registered " + assets.Count + " Asset(s)");
+            Debug.WriteLine("Registered " + assets.Count + " Asset(s)");
 
             return Id;
         }

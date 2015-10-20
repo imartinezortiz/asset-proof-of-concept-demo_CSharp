@@ -38,7 +38,7 @@ namespace AssetPackage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.Asset class.
+        /// Initializes a new instance of the AssetPackage.Asset class.
         /// </summary>
         public Asset()
             : base()

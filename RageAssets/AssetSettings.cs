@@ -13,7 +13,7 @@
     public class AssetSettings : BaseSettings
     {
         /// <summary>
-        /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.AssetSettings class.
+        /// Initializes a new instance of the AssetPackage.AssetSettings class.
         /// </summary>
         public AssetSettings()
             : base()

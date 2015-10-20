@@ -13,7 +13,6 @@ namespace AssetPackage
     using System.Xml.Linq;
     using System.Xml.Serialization;
     using System.Xml.XPath;
-
     using AssetManagerPackage;
 
     /// <summary>
@@ -24,7 +23,7 @@ namespace AssetPackage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.Asset class.
+        /// Initializes a new instance of the AssetManagerPackage.BaseAsset class.
         /// </summary>
         public BaseAsset()
         {
@@ -372,6 +371,22 @@ namespace AssetPackage
             //
             String xml = GetEmbeddedResource(GetType().Namespace, String.Format("Resources.{0}.VersionAndDependencies.xml", GetType().Name));
 
+            // Not PCL
+            // 
+            //foreach (String res in GetType().Assembly.GetManifestResourceNames())
+            //{
+            //    Debug.WriteLine(res);
+            //}
+
+            //if (String.IsNullOrEmpty(xml))
+            //{
+            //    // http://stackoverflow.com/questions/26348663/load-embedded-xml-in-xamarin-c
+            //    IEmbeddedResource er = getInterface<IEmbeddedResource>();
+            //    String path = er.RetrieveResource(String.Format("Resources.{0}.VersionAndDependencies.xml", GetType().Name));
+
+            //    xml = er.RetrieveResource(path);
+            //}
+
             if (!String.IsNullOrEmpty(xml))
             {
                 return XDocument.Parse(xml);
@@ -395,11 +410,18 @@ namespace AssetPackage
             String path = String.Format("{0}.{1}", ns, res);
 
             // Console.WriteLine("Loading Resources: {0}",path);
-
-            using (StreamReader reader = new StreamReader(GetType().Assembly.GetManifestResourceStream(path)))
+            using (Stream stream = GetType().Assembly.GetManifestResourceStream(path))
             {
-                return reader.ReadToEnd();
+                if (stream != null)
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
             }
+
+            return String.Empty;
         }
 
         /// <summary>

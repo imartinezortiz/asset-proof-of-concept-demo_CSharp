@@ -6,6 +6,7 @@
 namespace AssetPackage
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// A logger.
@@ -15,7 +16,7 @@ namespace AssetPackage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the asset_proof_of_concept_demo_CSharp.Logger class.
+        /// Initializes a new instance of the AssetPackage.Logger class.
         /// </summary>
         public Logger()
             : base()
@@ -45,7 +46,7 @@ namespace AssetPackage
             else
             {
                 // Default behavior.
-                Console.WriteLine(msg);
+                Debug.WriteLine(msg);
             }
         }
 
