@@ -58,7 +58,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Asset.VersionAndDependencies.xml" />
+    <EmbeddedResource Include="Resources\Asset.VersionAndDependencies.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\DialogueAsset.VersionAndDependencies.xml" />
     <EmbeddedResource Include="Resources\Logger.VersionAndDependencies.xml" />
   </ItemGroup>
