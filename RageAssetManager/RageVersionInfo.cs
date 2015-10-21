@@ -9,9 +9,16 @@ using System.Xml.Serialization;
 
 namespace AssetManagerPackage
 {
+    /// <summary>
+    /// Information about the rage version.
+    /// </summary>
     [XmlRoot("version")]
     public class RageVersionInfo
     {
+        /// <summary>
+        /// Initializes a new instance of the AssetManagerPackage.RageVersionInfo
+        /// class.
+        /// </summary>
         public RageVersionInfo()
         {
             Dependencies = new Dependencies();

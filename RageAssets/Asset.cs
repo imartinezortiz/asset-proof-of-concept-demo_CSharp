@@ -111,7 +111,7 @@ namespace AssetPackage
         /// <returns>
         /// A List&lt;String&gt;
         /// </returns>
-        public List<String> doList()
+        public String[] doList()
         {
             IDataStorage ds = getInterface<IDataStorage>();
 
@@ -121,7 +121,7 @@ namespace AssetPackage
             }
             else
             {
-                return FileStorage.Keys.ToList();
+                return FileStorage.Keys.ToArray();
             }
         }
 
