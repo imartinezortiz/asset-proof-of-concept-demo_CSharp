@@ -378,9 +378,27 @@ namespace asset_proof_of_concept_demo_CSharp
         /// </summary>
         private static void Test_07_DialogueAsset()
         {
+            const string script =
+    @"0 Hi! Welcome to RAGE! Is this your first visit? [1,2]
+1 Yes, I just arrived-> 3
+2 No, I've been here before -> 4
+3 Awesome!Have fun! -> 5
+4 Hey, welcome back -> 5
+5 Do you want to be my friend?[6, 7, 8, 9]
+6 Yes-> 10
+7 No-> 11
+8 Maybe-> 12
+9 Not sure -> 12
+10 Great! -> 13
+11 Awwww-> 13
+12 Please! -> 5
+13 Oh hi -> 13
+banana: I hate bananas
+";
+
             //! DialogAsset.
             //
-            asset5.LoadScript("me", typeof(DialogueAsset).Namespace, "script.txt");
+            asset5.ParseScript("me", script);
 
             // Interacting using ask/tell
 

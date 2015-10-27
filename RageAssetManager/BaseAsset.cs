@@ -389,10 +389,10 @@ namespace AssetPackage
 
             // Not PCL
             // 
-            //foreach (String res in GetType().Assembly.GetManifestResourceNames())
-            //{
-            //    Debug.WriteLine(res);
-            //}
+            foreach (String res in GetType().Assembly.GetManifestResourceNames())
+            {
+                Debug.WriteLine(res);
+            }
 
             //if (String.IsNullOrEmpty(xml))
             //{

@@ -185,11 +185,11 @@ namespace AssetManagerPackage
 
             String Id = String.Format("{0}_{1}", claz, idGenerator++);
 
-            Debug.WriteLine("Registering Asset {0}/{1} as {2}", asset.GetType().Name, claz, Id);
+            Debug.WriteLine(String.Format("Registering Asset {0}/{1} as {2}", asset.GetType().Name, claz, Id));
 
             assets.Add(Id, asset);
 
-            Debug.WriteLine("Registered " + assets.Count + " Asset(s)");
+            Debug.WriteLine(String.Format("Registered {0} Asset(s)", assets.Count));
 
             return Id;
         }

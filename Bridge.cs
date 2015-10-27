@@ -104,10 +104,10 @@ namespace AssetPackage
         /// <returns>
         /// A List&lt;String&gt;
         /// </returns>
-        public List<String> Files()
+        public String[] Files()
         {
             return Directory.GetFiles(StorageDir).ToList().ConvertAll(
-    new Converter<String, String>(p => p.Replace(StorageDir + Path.DirectorySeparatorChar, ""))).ToList();
+    new Converter<String, String>(p => p.Replace(StorageDir + Path.DirectorySeparatorChar, ""))).ToArray();
 
             //! EnumerateFiles not supported in Unity3D.
             // 
