@@ -18,7 +18,8 @@
     /// time.</para><para>If modification and storage is needed at run-time,
     /// the<see cref="IDataStorage"/>interface could be used
     /// i.c.m.<see cref="ISettings"/>Methods.</para>
-    /// <para>This interface, if implemented in a bridge, allows to check if:</para>
+    /// <para>This interface, if implemented in a bridge, allows to check if an <see cref="Asset"/>
+    /// has some default settings</para>
     /// </remarks>
     public interface IDefaultSettings
     {

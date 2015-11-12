@@ -27,7 +27,7 @@ namespace AssetPackage
         Boolean Delete(String fileId);
 
         /// <summary>
-        /// Exists the given file.
+        /// Check if exists the file with the given identifier.
         /// </summary>
         ///
         /// <param name="fileId"> The file identifier to delete. </param>
@@ -55,10 +55,10 @@ namespace AssetPackage
         /// Loads the given file.
         /// </summary>
         ///
-        /// <param name="fileId"> The file identifier to delete. </param>
+        /// <param name="fileId"> The file identifier to load. </param>
         ///
         /// <returns>
-        /// A String.
+        /// A String with with the file contents.
         /// </returns>
         String Load(String fileId);
 

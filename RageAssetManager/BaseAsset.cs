@@ -293,7 +293,7 @@ namespace AssetPackage
         }
 
         /// <summary>
-        /// Loads Settings object from Run-time Settings.
+        /// Save Settings object from Run-time Settings.
         /// </summary>
         ///
         /// <remarks>
